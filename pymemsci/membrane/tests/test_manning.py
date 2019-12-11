@@ -26,7 +26,8 @@ def test_manning_parameter():
 class TestActivity:
     def test_activity_against_lit_monovalent(self):
         """
-        Test activity coefficient calculations for condensed counter-ion case
+        Test activity coefficient calculations for monovalent, condensed
+        counter-ion case.
 
         Data reported in Fig. 5 & 10 of Kamcev, J.; Paul, D. R.; Freeman, B. D. 
         Ion Activity Coefficients in Ion Exchange Polymers: Applicability of 
@@ -51,6 +52,37 @@ class TestActivity:
             atol=0.01,
         )
 
+    def test_activity_against_lit_multivalent(self):
+        """
+        Test activity coefficient calculations for multivalent, condensed
+        counter-ion case.
+
+        Data reported in Fig. 6 of (1) Galizia, M.; Manning, G. S.; Paul, 
+        D. R.; Freeman, B. D. Ion partitioning between brines and ion exchange 
+        polymers. Polymer (Guildf). 2019, 165 (January), 91–100.
+        """
+        # CR61 cation exchange membrane
+        xi = 1.83  # Manning parameter
+        Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
+        # 0.1 M external NaCl concentration
+        Cs = "0.035 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+        assert allclose(
+            manning.get_activity_coefficient_manning(
+                xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
+            ),
+            0.15 ** 0.33,
+            atol=0.01,
+        )
+        # 4 M external NaCl concentration
+        Cs = "3.5 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+        assert allclose(
+            manning.get_activity_coefficient_manning(
+                xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
+            ),
+            0.8 ** 0.33,
+            atol=0.035,
+        )
+
     def test_bad_input_type(self):
         with pytest.raises(Exception, match="Invalid"):
             manning.get_activity_coefficient_manning(
@@ -59,9 +91,7 @@ class TestActivity:
 
     def test_sign_mismatch_1(self):
         with pytest.raises(Exception, match="Mismatch"):
-            manning.get_activity_coefficient_manning(
-                2, "3 mol/L", "3e-4 mol/L"
-            )
+            manning.get_activity_coefficient_manning(2, "3 mol/L", "3e-4 mol/L")
 
     def test_sign_mismatch_2(self):
         with pytest.raises(Exception, match="Mismatch"):
@@ -116,26 +146,10 @@ def test_symmetry():
     Cc_co = s_mem.get_amount("Cl-", "mol/L")
 
     Dc_ct = manning.get_diffusion_coefficient_manning(
-        xi,
-        Cfix,
-        str(Cc_co),
-        vol_frac,
-        "counter",
-        nu_counter,
-        nu_co,
-        z_counter,
-        z_co,
+        xi, Cfix, str(Cc_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Dc_co = manning.get_diffusion_coefficient_manning(
-        xi,
-        Cfix,
-        str(Cc_co),
-        vol_frac,
-        "co",
-        nu_counter,
-        nu_co,
-        z_counter,
-        z_co,
+        xi, Cfix, str(Cc_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     Ac_ct = manning.get_activity_coefficient_manning(
@@ -158,26 +172,10 @@ def test_symmetry():
     Ca_co = s_mem.get_amount("Na+", "mol/L")
 
     Da_ct = manning.get_diffusion_coefficient_manning(
-        xi,
-        Cfix,
-        str(Ca_co),
-        vol_frac,
-        "counter",
-        nu_counter,
-        nu_co,
-        z_counter,
-        z_co,
+        xi, Cfix, str(Ca_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Da_co = manning.get_diffusion_coefficient_manning(
-        xi,
-        Cfix,
-        str(Ca_co),
-        vol_frac,
-        "co",
-        nu_counter,
-        nu_co,
-        z_counter,
-        z_co,
+        xi, Cfix, str(Ca_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     Aa_ct = manning.get_activity_coefficient_manning(
