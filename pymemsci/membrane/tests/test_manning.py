@@ -7,22 +7,6 @@ import manning
 from numpy import allclose
 
 
-def test_manning_parameter():
-    """
-        test the calculation of the manning parameter
-
-        Data taken from Kamcev, J.; Paul, D. R.; Freeman, B. D.
-        Ion Activity Coefficients in Ion Exchange Polymers: Applicability of
-        Manning’s Counterion Condensation Theory. Macromolecules 2015, 48 (21),
-        8011–8024.
-        """
-    # CR61 cation exchange membrane
-    Cfix = "-1.60 mol/L"  # fixed charge conc. in mol/L swollen membrane
-    dielectric = 42
-    temp = "23 degC"  # room temperature
-    assert manning.get_manning_parameter(Cfix, 42, temp) == 1.83
-
-
 class TestActivity:
     def test_activity_against_lit_monovalent(self):
         """

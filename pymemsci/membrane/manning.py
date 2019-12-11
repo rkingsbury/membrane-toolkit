@@ -1,6 +1,6 @@
 """
-Solver for mobile salt concentration inside a charged membrane
-according to Manning Counter-Ion Condensation Theory
+Manning's counter-ion condensation theory for thermodynamics of ions
+in charged membranes.
 
 manning theory library changelog
 ================================
@@ -38,59 +38,6 @@ version 1.0.0-dev
 """
 from pyEQL import unit
 import math
-
-
-def get_manning_parameter(fixed_charge, permittivity, temperature="25 degC"):
-    """
-    Calculate the Manning parameter of the membrane
-
-    Parameters
-    ----------
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the membrane
-    permittivity : float
-        The relative permittivity of the hydrated membrane, dimensionless.
-    temperature : str quantity, optional
-                The temperature of the solution surrounding the membrane,
-                including the unit. Defaults to '25 degC' if omitted.
-    Notes
-    -----
-    The Manning Parameter is defined as [#]:
-
-    .. math:: \\psi = e^2 \\over {4 \\pi \\epsilon_0 \\epsilon k_b T b}
-
-    where b is the average distance between fixed charge groups, calculated
-    here based on the fixed charge concentration and the lattice distance.
-
-    References
-    ----------
-    .. [#] J. Kamcev, D. R. Paul and B. D. Freeman, Macromolecules, 2015,
-       acs.macromol.5b01654.
-    .. [#] J. Kamcev, M. Galizia, F. M. Benedetti, E.-S. Jang, D. R. Paul,
-       B. Freeman and G. S. Manning, Phys. Chem. Chem. Phys., 2016.
-
-    See Also
-    --------
-    get_fixed_charge_density
-
-    """
-    # calculate the average volume per fixed charge groups as the reciprocal
-    # of the molar concentration (times avogadro's number). Take the cube root
-    # of the volume to get the average distance between molecules
-
-    # TODO - should the units of fixed charge be mol/L membrane or per L of
-    # absorbed water?
-
-    b = (abs(unit(fixed_charge)).to("mol/L") * unit.N_A) ** (-1 / 3)
-    temperature = unit(temperature)
-
-    # calculate the manning parameters
-    manning = unit.e ** 2 / (
-        4 * math.pi * unit.epsilon_0 * permittivity * unit.k * temperature * b
-    )
-
-    return manning.to("dimensionless").magnitude
 
 
 def manning_eql(solution, xi, fixed_charge):
