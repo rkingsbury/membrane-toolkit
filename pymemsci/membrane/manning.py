@@ -281,6 +281,12 @@ def get_activity_coefficient_manning(
                 "Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."
             )
 
+    # verify that the stoichiometry of the salt makes sense
+    if z_counter * nu_counter != -1 * z_co * nu_co:
+        raise Exception(
+            "Error in input stoichiometry. z_counter * n_counter != | z_co * nu_co |. Aborting."
+        )
+
     # calculate the ratio of fixed charge to mobile salt concentration
     X = abs(unit(fixed_charge) / unit(Cs)).magnitude
 
