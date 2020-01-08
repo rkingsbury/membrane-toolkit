@@ -11,97 +11,146 @@ from pymemsci.membrane.manning import (
 from numpy import allclose
 
 
-class TestActivity:
-    def test_activity_against_lit_monovalent(self):
-        """
-        Test activity coefficient calculations for monovalent, condensed
-        counter-ion case.
+def test_activity_against_lit_monovalent():
+    """
+    Test activity coefficient calculations for monovalent, condensed
+    counter-ion case.
 
-        Data reported in Fig. 5 & 10 of Kamcev, J.; Paul, D. R.; Freeman, B. D.
-        Ion Activity Coefficients in Ion Exchange Polymers: Applicability of
-        Manning’s Counterion Condensation Theory. Macromolecules 2015, 48 (21),
-        8011–8024.
-        """
-        # CR61 cation exchange membrane
-        xi = 1.83  # Manning parameter
-        Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
-        # 0.01 M external NaCl concentration
-        Cs = "3e-4 mol/L"
-        assert allclose(
-            get_activity_coefficient_manning(xi, Cfix, Cs), 0.2 ** 0.5, atol=0.01
+    Data reported in Fig. 5 & 10 of Kamcev, J.; Paul, D. R.; Freeman, B. D.
+    Ion Activity Coefficients in Ion Exchange Polymers: Applicability of
+    Manning’s Counterion Condensation Theory. Macromolecules 2015, 48 (21),
+    8011–8024.
+    """
+    # CR61 cation exchange membrane
+    xi = 1.83  # Manning parameter
+    Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
+    # 0.01 M external NaCl concentration
+    Cs = "3e-4 mol/L"
+    assert allclose(
+        get_activity_coefficient_manning(xi, Cfix, Cs), 0.2 ** 0.5, atol=0.01
+    )
+    # 1 M external NaCl concentration
+    Cs = "0.4 mol/L"
+    assert allclose(
+        get_activity_coefficient_manning(xi, Cfix, Cs), 0.29 ** 0.5, atol=0.01
+    )
+
+
+def test_activity_against_lit_multivalent():
+    """
+    Test activity coefficient calculations for multivalent, condensed
+    counter-ion case.
+
+    Data reported in Fig. 6 of (1) Galizia, M.; Manning, G. S.; Paul,
+    D. R.; Freeman, B. D. Ion partitioning between brines and ion exchange
+    polymers. Polymer (Guildf). 2019, 165 (January), 91–100.
+    """
+    # CR61 cation exchange membrane
+    xi = 1.83  # Manning parameter
+    Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
+    # 0.1 M external NaCl concentration
+    Cs = "0.035 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+    assert allclose(
+        get_activity_coefficient_manning(
+            xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
+        ),
+        0.15 ** 0.33,
+        atol=0.01,
+    )
+    # 4 M external NaCl concentration
+    Cs = "3.5 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+    assert allclose(
+        get_activity_coefficient_manning(
+            xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
+        ),
+        0.8 ** 0.33,
+        atol=0.035,
+    )
+
+
+def test_activity_against_lit_monovalent_uncondensed():
+    """
+    Test activity coefficient calculations for monovalent, uncondensed
+    counter-ion case.
+
+    Data reported in Fig. 6 of Kamcev, J.; Paul, D. R.; Freeman, B. D.
+    Equilibrium ion partitioning between aqueous salt solutions and inhomogeneous
+    ion exchange membranes. Desalination 2018, 446 (September), 31–41.
+    """
+    # CA267 cation exchange membrane
+    xi = 1.00  # Manning parameter
+    Cfix = "-2.66 mol/L"  # fixed charge conc. in mol/L water sorbed
+    # 0.03 M external NaCl concentration
+    Cs = "0.0007 mol/L"
+    # bulk solution activity coefficient is 0.85 at this concentration
+    # so gamma_membrane^2 = C_bulk ^2 0.85 ^2 / C_+ C_-
+    # C- = Cs and C+ = Cs + Cfix
+    # so gamma_membrane =( 0.03^2 0.85^2 / 0.0007 / 2.6607 )^0.5 = 0.590
+    assert allclose(
+        get_activity_coefficient_manning(xi, Cfix, Cs), 0.590, atol=0.02
+    )
+
+
+def test_activity_continuity_monovalent():
+    """
+    Test that the activity coefficients are continuous across the critical
+    value of manning parameter
+
+    """
+    # CA267 cation exchange membrane
+    Cfix = "-2.66 mol/L"  # fixed charge conc. in mol/L water sorbed
+    # 0.03 M external NaCl concentration
+    Cs = "0.0007 mol/L"
+    # the critical value of xi is 1 for a monovalent counter-ion
+    assert allclose(
+        get_activity_coefficient_manning(1.01, Cfix, Cs),
+        get_activity_coefficient_manning(0.99, Cfix, Cs),
+        atol=0.01
+    )
+
+
+def test_bad_input_type():
+    with pytest.raises(Exception, match="Invalid"):
+        get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", type="blah")
+
+
+def test_sign_mismatch_1():
+    with pytest.raises(Exception, match="Mismatch"):
+        get_activity_coefficient_manning(2, "3 mol/L", "3e-4 mol/L")
+
+
+def test_sign_mismatch_2():
+    with pytest.raises(Exception, match="Mismatch"):
+        get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", z_counter=-1)
+
+
+def test_off_stoichiometry():
+    with pytest.raises(Exception, match="stoichiometry"):
+        get_activity_coefficient_manning(
+            2, "-3 mol/L", "3e-4 mol/L", z_counter=1, z_co=-2, nu_counter=1, nu_co=2
         )
-        # 1 M external NaCl concentration
-        Cs = "0.4 mol/L"
-        assert allclose(
-            get_activity_coefficient_manning(xi, Cfix, Cs), 0.29 ** 0.5, atol=0.01
-        )
 
-    def test_activity_against_lit_multivalent(self):
-        """
-        Test activity coefficient calculations for multivalent, condensed
-        counter-ion case.
 
-        Data reported in Fig. 6 of (1) Galizia, M.; Manning, G. S.; Paul,
-        D. R.; Freeman, B. D. Ion partitioning between brines and ion exchange
-        polymers. Polymer (Guildf). 2019, 165 (January), 91–100.
-        """
-        # CR61 cation exchange membrane
-        xi = 1.83  # Manning parameter
-        Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
-        # 0.1 M external NaCl concentration
-        Cs = "0.035 mol/L"  # Mobile salt concentration is Cl- conc. / 2
-        assert allclose(
-            get_activity_coefficient_manning(
-                xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
-            ),
-            0.15 ** 0.33,
-            atol=0.01,
-        )
-        # 4 M external NaCl concentration
-        Cs = "3.5 mol/L"  # Mobile salt concentration is Cl- conc. / 2
-        assert allclose(
-            get_activity_coefficient_manning(
-                xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
-            ),
-            0.8 ** 0.33,
-            atol=0.035,
-        )
+def test_diffusion_against_lit():
+    # Test diffusion coefficient calculations against
+    # data reported in XXXXX
+    pass
 
-    def test_bad_input_type(self):
-        with pytest.raises(Exception, match="Invalid"):
-            get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", type="blah")
 
-    def test_sign_mismatch_1(self):
-        with pytest.raises(Exception, match="Mismatch"):
-            get_activity_coefficient_manning(2, "3 mol/L", "3e-4 mol/L")
+def test_concentration_against_lit():
+    # Test diffusion coefficient calculations against
+    # data reported in XXXXX
+    pass
 
-    def test_sign_mismatch_2(self):
-        with pytest.raises(Exception, match="Mismatch"):
-            get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", z_counter=-1)
 
-    def test_off_stoichiometry(self):
-        with pytest.raises(Exception, match="stoichiometry"):
-            get_activity_coefficient_manning(
-                2, "-3 mol/L", "3e-4 mol/L", z_counter=1, z_co=-2, nu_counter=1, nu_co=2
-            )
+def test_A_factor():
+    pass
 
-    def test_diffusion_against_lit(self):
-        # Test diffusion coefficient calculations against
-        # data reported in XXXXX
-        pass
 
-    def test_concentration_against_lit(self):
-        # Test diffusion coefficient calculations against
-        # data reported in XXXXX
-        pass
-
-    def test_A_factor(self):
-        pass
-
-    def test_charge_mismatch(self):
-        # test the warning when the sign of the counter-ion
-        # and the sign of the fixed charges match
-        pass
+def test_charge_mismatch():
+    # test the warning when the sign of the counter-ion
+    # and the sign of the fixed charges match
+    pass
 
 
 def test_symmetry():
