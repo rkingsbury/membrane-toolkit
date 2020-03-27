@@ -9,4 +9,14 @@ Unitized methods should have the same name as the base method and be wrapped wit
 appropriate units using pint's .wraps() decorator.
 """
 from pint import UnitRegistry
+
 ureg = UnitRegistry()
+
+from membrane_toolkit.core.diffusion import (
+    diffusion_coefficient_mackie_meares,
+)
+
+
+diffusion_coefficient_mackie_meares = ureg.wraps("=A", ("=A", ureg.dimensionless,))(
+    diffusion_coefficient_mackie_meares
+)
