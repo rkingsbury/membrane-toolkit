@@ -1,15 +1,3 @@
-Name ideas
-----------
-
-- pymemsci
-- pymembrsci
-- flux / pyflux
-- pymemsep
-- membrcad
-- memcalc / pymemcalc
-
-but mem = "memory" in computational world
-
 How to represent different solvents? AqueousSolution / OrganicSolution / Vapor / Gas?
 
 Main class is a differential slice of bulk | int | mem | int | bulk

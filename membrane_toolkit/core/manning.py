@@ -1,3 +1,7 @@
+# Copyright (c) Ryan Kingsbury
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+
 """
 Manning's counter-ion condensation theory for thermodynamics of ions
 in charged membranes.
@@ -8,7 +12,7 @@ manning theory library changelog
 1.0.0 (in progress)
 --------------------
 
- - add method to calculate thermodynamic factors for activity coefficients 
+ - add method to calculate thermodynamic factors for activity coefficients
    (beta factors)
 
 0.9.0 (2017-06-27)
@@ -18,7 +22,7 @@ manning theory library changelog
    for positively-charged polymers when Manning parameter < 1.
  - Add the ability to calculate diffusion coefficients according to Manning
    theory
-   
+
 0.8.0 (2017-03-29)
 ------------------
 
@@ -327,7 +331,7 @@ def get_activity_coefficient_manning(
         raise Exception("Invalid 'type' argument. Enter 'counter'', 'co', or 'mean'")
 
 
-def get_diffusion_coefficient_manning(
+def diffusion_coefficient_manning(
     xi,
     fixed_charge,
     Cs,
@@ -391,19 +395,19 @@ def get_diffusion_coefficient_manning(
     Tests
     -----
     Multivalent, xi > critical
-    >>> manning.get_diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.0105 mol/L',0.465,type='co',nu_counter=1,nu_co=2,z_counter=2)
+    >>> manning.diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.0105 mol/L',0.465,type='co',nu_counter=1,nu_co=2,z_counter=2)
     0.08872209947492504
 
     Monoovalent, xi > critical
-    >>> manning.get_diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.05 mol/L',0.50,type='co')
+    >>> manning.diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.05 mol/L',0.50,type='co')
     0.09646909589490148
 
     Monovalent, xi < critical
-    >>> manning.get_diffusion_coefficient_manning(0.18,'-1.39 mol/L','0.08 mol/L',0.51,type='co')
+    >>> manning.diffusion_coefficient_manning(0.18,'-1.39 mol/L','0.08 mol/L',0.51,type='co')
     0.11645435790753468
 
     Monovalent with AEM, xi > critical
-    >>> manning.get_diffusion_coefficient_manning(2.21,'3.58 mol/L','0.004 mol/L',0.405,type='co',nu_counter=1,nu_co=1,z_counter=-1,z_co=1)
+    >>> manning.diffusion_coefficient_manning(2.21,'3.58 mol/L','0.004 mol/L',0.405,type='co',nu_counter=1,nu_co=1,z_counter=-1,z_co=1)
     0.055822613199559216
 
     References
@@ -418,7 +422,7 @@ def get_diffusion_coefficient_manning(
     Examples
     --------
     # an example based on Figure 7 of the Kamcev Reference
-    >>> manning.get_diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')
+    >>> manning.diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')
     0.10082061291437808
 
     """

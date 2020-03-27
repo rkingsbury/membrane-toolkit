@@ -1,3 +1,7 @@
+# Copyright (c) Ryan Kingsbury
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+
 """
 Placeholder for methods that facilitate calculating membrane properties from
 experimental data. e.g. processing volume change vs. time into permeability.
@@ -45,7 +49,7 @@ class ExptBase(ABC, MSONable):
     @abstractmethod
     def setup_test(self):
         """
-        
+
         """
         pass
 
@@ -77,9 +81,15 @@ class DeadEndExpt(ExptBase):
     """
 
 
-class CrossflowExpt(ExptBase):
+class CrossFlowExpt(ExptBase):
     """
     Class for processing crossflow data.
+    """
+
+
+class PermselectivityExpt(ExptBase):
+    """
+    Class for processing diffusion cell data.
     """
 
 

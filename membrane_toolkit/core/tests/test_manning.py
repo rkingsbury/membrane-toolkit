@@ -1,14 +1,19 @@
-# Tests for the Manning theory library
+# Copyright (c) Ryan Kingsbury
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+
+"""
+Tests for the Manning theory library
+"""
 
 import pytest
+from numpy import allclose
 
-import pyEQL
-from pymemsci.membrane.manning import (
+from membrane_toolkit.core.manning import (
     get_activity_coefficient_manning,
-    get_diffusion_coefficient_manning,
+    diffusion_coefficient_manning,
     manning_eql,
 )
-from numpy import allclose
 
 
 def test_activity_against_lit_monovalent():
@@ -180,10 +185,10 @@ def test_symmetry():
     Cc_ct = s_mem.get_amount("Na+", "mol/L")
     Cc_co = s_mem.get_amount("Cl-", "mol/L")
 
-    Dc_ct = get_diffusion_coefficient_manning(
+    Dc_ct = diffusion_coefficient_manning(
         xi, Cfix, str(Cc_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
-    Dc_co = get_diffusion_coefficient_manning(
+    Dc_co = diffusion_coefficient_manning(
         xi, Cfix, str(Cc_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 
@@ -206,10 +211,10 @@ def test_symmetry():
     Ca_ct = s_mem.get_amount("Cl-", "mol/L")
     Ca_co = s_mem.get_amount("Na+", "mol/L")
 
-    Da_ct = get_diffusion_coefficient_manning(
+    Da_ct = diffusion_coefficient_manning(
         xi, Cfix, str(Ca_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
-    Da_co = get_diffusion_coefficient_manning(
+    Da_co = diffusion_coefficient_manning(
         xi, Cfix, str(Ca_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 

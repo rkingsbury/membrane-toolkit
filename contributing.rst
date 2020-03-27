@@ -1,7 +1,7 @@
 Coding Concepts
 ===============
 
-pymemsci is designed to work closely with the family of codes maintained by
+membrane-toolkit is designed to work closely with the family of codes maintained by
 [The Materials Project](https://github.com/materialsproject/). In particular, 
 we follow the major architectural decisions of the 
 [pymatgen](https://github.com/materialsproject/pymatgen) maintainers regarding
@@ -27,25 +27,26 @@ like numpy and scipy:
 * String operations in [pymatgen.util.string](https://github.com/materialsproject/pymatgen/blob/2a813c172f3be38efc3205a102021eaba1da156f/pymatgen/util/string.py)
 * Type Hinting functionality in the 
   [typing](https://docs.python.org/3/library/typing.html) module
+* `Builder` class from [maggma](https://github.com/materialsproject/maggma)
 
 
 Coding Guidelines
 =================
 
-To ensure the long-term sustainability of the pymemsci codebase, we enforce very
+To ensure the long-term sustainability of the membrane-toolkit codebase, we enforce very
 strict quality control standards for all contributions. Specifically, all new
 code must adhere to the following:
 
 1. **Unittests** are required for all new modules and methods. The only way to
-   minimize regression and ensure confidence in pymemsci's calculations is to 
+   minimize regression and ensure confidence in membrane-toolkit's calculations is to 
    thoroughly test all code. If the maintainer cannot test your code, 
    the contribution will be rejected. Test should conform to the following schema:
         
         * Use [pytest](https://docs.pytest.org/en/latest/)
-        * Place tests in files named `test_xxxx.py` in a `/tests` subdirectory 
+        * Place tests in files named `test_xxxx.py` in a `tests` subdirectory 
           of the directory where your code resides.
-        * If you test requires external files, place those in `test_files` in
-          the root pymemsci directory.
+        * If your test requires external files, place those in `test_files` in
+          the root membrane-toolkit directory.
         * Test all realistic combinations of input arguments 
 
 2. **Documentation** required for all modules, classes and methods. In
@@ -68,5 +69,5 @@ code must adhere to the following:
 4. **Python 3**. We only support Python 3.5+.
 
 
-For the above, if in doubt, please refer to the core classes in pymemsci for
+For the above, if in doubt, please refer to the core classes in membrane-toolkit for
 examples of what is expected.
