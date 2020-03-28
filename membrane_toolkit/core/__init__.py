@@ -14,3 +14,4 @@ from .diffusion import *
 from .manning import *
 from .donnan import *
 from .flory_huggins import *
+from .potential import *

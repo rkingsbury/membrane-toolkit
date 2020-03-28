@@ -12,6 +12,16 @@ from membrane_toolkit.core.unitized import *
 
 
 def test_diffusion_coefficient_mackie_meares():
-    q1 = ureg.Quantity('1e-9 m**2/s')
-    q2 = ureg.Quantity('0.4 dimensionless')
-    assert diffusion_coefficient_mackie_meares(q1, q2) == ureg.Quantity('6.25e-11 m**2/s')
+    q1 = ureg.Quantity("1e-9 m**2/s")
+    q2 = ureg.Quantity("0.4 dimensionless")
+    assert diffusion_coefficient_mackie_meares(q1, q2) == ureg.Quantity(
+        "6.25e-11 m**2/s"
+    )
+
+
+def test_apparent_permselectivity():
+    q1 = ureg.Quantity("-30 mV")
+    q2 = ureg.Quantity("-40 mV")
+    q3 = ureg.Quantity("0.5 dimensionless")
+    assert apparent_permselectivity(q1, q2, q3).magnitude == pytest.approx(0.75)
+    assert apparent_permselectivity(q1, q2, q3).dimensionality == ureg.dimensionless
