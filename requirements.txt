@@ -1,4 +1,5 @@
 numpy
 pymatgen
 monty
-matplotlib or plotly
+maggma
+pint
