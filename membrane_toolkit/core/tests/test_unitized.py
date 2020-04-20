@@ -35,3 +35,20 @@ def test_apparent_permselectivity():
         apparent_permselectivity(30, q2)
     with pytest.raises(DimensionalityError):
         apparent_permselectivity(q3, q2)
+
+
+def test_nernst_potential():
+    q1 = ureg.Quantity("1 mol/L")
+    q2 = ureg.Quantity("0.1 mol/L")
+    q3 = ureg.Quantity("0.5 dimensionless")
+    q4 = ureg.Quantity("0.1 dimensionless")
+    q5 = ureg.Quantity(30, ureg.degC)
+    q6 = ureg.Quantity(25, ureg.degC)
+    assert nernst_potential(q1, q2, 1, q6).magnitude == pytest.approx(0.05916, abs=1e-5)
+    assert nernst_potential(q1, q2, 1, q6).units == 'volt'
+    assert nernst_potential(q3, q4, 1, q5).magnitude == pytest.approx(0.04204, abs=1e-5)
+    assert nernst_potential(q3, q4, 1, q5).units == 'volt'
+    with pytest.raises(ValueError):
+        nernst_potential(1, 0.1)
+    with pytest.raises(DimensionalityError):
+        nernst_potential(q3, q2)

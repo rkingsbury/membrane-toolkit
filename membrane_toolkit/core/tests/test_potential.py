@@ -28,9 +28,30 @@ def test_apparent_permselectivity():
     # basic calculations
     assert apparent_permselectivity(0, -40) == 0
     assert apparent_permselectivity(-40, -40) == 1
-    assert apparent_permselectivity(-40, -40) == apparent_permselectivity(
-        -40, -40)
+    assert apparent_permselectivity(-40, -40) == apparent_permselectivity(-40, -40)
 
     # numerical examples
     assert apparent_permselectivity(30, 40, 0.5) == pytest.approx(0.75)
     assert apparent_permselectivity(35, 37.8, 0.396) == pytest.approx(0.9386, abs=1e-4)
+
+
+def test_nernst_potential():
+    """
+    - a0 negative
+    - aL negative
+    - temperature negative
+    - a0 = aL
+    - flipping the sign of the counter ion
+    - z_ct not equal to 1 or -1
+    - 2 numerical examples
+    """
+    with pytest.raises(ValueError, match="invalid activity argument of a0"):
+        nernst_potential(-0.2, 0.5)
+    with pytest.raises(ValueError, match="invalid activity argument of aL"):
+        nernst_potential(0.2, -0.5)
+    with pytest.raises(ValueError, match="invalid temperature argument"):
+        nernst_potential(0.2, 0.5, 1, -280)
+    assert nernst_potential(0.5, 0.5, 2, 450) == 0
+    assert nernst_potential(0.5, 0.1, -2) == -1 * nernst_potential(0.5, 0.1, 2)
+    assert nernst_potential(1, 0.1) == pytest.approx(0.05916, abs=1e-5)
+    assert nernst_potential(50, 2, 2, 76.85) == pytest.approx(0.048539, abs=1e-5)

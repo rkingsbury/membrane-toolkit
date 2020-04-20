@@ -7,7 +7,7 @@ Unitized versions of all methods in membrane_toolkit.core
 
 Unitized methods should have the same name as the base method and be wrapped with
 appropriate units using pint's .wraps() decorator. Unitized methods should perform
-computations in base SI units unless there is a specific reason (performance, 
+computations in base SI units unless there is a specific reason (performance,
 numerical stability, etc.) to do otherwise.
 """
 from pint import UnitRegistry
@@ -26,3 +26,5 @@ diffusion_coefficient_mackie_meares = ureg.wraps(
 apparent_permselectivity = ureg.wraps(
     ureg.dimensionless, ("V", "V", ureg.dimensionless)
 )(apparent_permselectivity)
+
+nernst_potential = ureg.wraps("V", ("=A", "=A", None, "degC"))(nernst_potential)
