@@ -8,10 +8,10 @@ theme:
 nav:
   - Home: index.md
   - Core Functions: core_functions/core_functions.md
-  - Getting Started:
 
 repo_url: https://github.com/rkingsbury/membrane-toolkit
-docs_dir: ./docs
+docs_dir: ./membrane_toolkit/docs
+site_dir: ./docs
 markdown_extensions:
   - admonition
   - codehilite
