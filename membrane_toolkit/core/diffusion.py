@@ -16,7 +16,7 @@ def diffusion_coefficient_mackie_meares(D_bulk: float, phi_w: float) -> float:
 
     Args:
         D_bulk (float): Bulk diffusion coefficient, [L**2 / t]
-        phi (float): Water volume fraction (0 < phi_w < 1) in the membrane
+        phi_w (float): Water volume fraction (0 < \( \\phi_w \) < 1) in the membrane
             [dimensionless]
 
     Returns:
@@ -27,9 +27,9 @@ def diffusion_coefficient_mackie_meares(D_bulk: float, phi_w: float) -> float:
         to its diffusion coefficient inside a porous medium through the volume fraction
         of water (or porosity) of that medium. The equation is
 
-        .. math::
-
+        $$
             D_{mem} = D_{bulk} * ( \\frac{\\phi_w}{2-\\phi_w} )^2
+        $$
 
     References:
         Mackie, J. S.; Meares, P. The Diffusion of Electrolytes in a Cation-Exchange
@@ -40,7 +40,7 @@ def diffusion_coefficient_mackie_meares(D_bulk: float, phi_w: float) -> float:
         raise ValueError(
             "Invalid phi_w = {}. phi_w must be between 0 and 1".format(phi_w)
         )
-        
+
     return D_bulk * (phi_w / (2 - phi_w)) ** 2
 
 

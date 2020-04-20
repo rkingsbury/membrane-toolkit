@@ -7,7 +7,6 @@ Tests for the Manning theory library
 """
 
 import pytest
-import pyEQL
 from numpy import allclose
 
 from membrane_toolkit.core import (
@@ -164,7 +163,8 @@ def test_symmetry():
     # activity coefficients, and concentrations when
     # we reverse the charge of the membrane (i.e.,
     # reverse the co- and counter-ions)
-    bulk_solution = pyEQL.Solution(
+    from pyEQL import Solution
+    bulk_solution = Solution(
         [["Na+", "0.5 mol/L"], ["Cl-", "0.5 mol/L"]], temperature="25 degC"
     )
     # Manning parameter
