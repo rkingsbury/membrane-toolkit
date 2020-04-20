@@ -2,6 +2,8 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
+import warnings
+
 """
 Manning's counter-ion condensation theory for thermodynamics of ions
 in charged membranes.
@@ -40,8 +42,46 @@ manning theory library changelog
 
 version 1.0.0-dev
 """
-from pyEQL import unit
+from membrane_toolkit.core.unitized import ureg
 import math
+
+
+def fit_manning_parameter():
+    """
+    Fit the manning parameter based on co-ion sorption data.
+
+    # define an iterative method to solve for the manning parameter, given the co-ion concentraiton
+def solve_manning_param(charge,coion_conc):
+    def solve(xi,charge,coion_conc):
+
+        # define C and D solutions
+        cation = 'Na+'
+        anion = 'Cl-'
+        C_conc = '0.5 mol/L'
+        temp = '22 degC'
+
+        # identify the co-ion
+        if charge < 0:
+            coion = 'Cl-'
+        elif charge >0:
+            coion = 'Na+'
+        else:
+            print('Membrane is uncharged!')
+            return None
+
+        # create C and D solutions
+        C_soln = pyEQL.Solution([[cation,C_conc],[anion,C_conc]],temperature=temp)
+        # equilibrate the bulk solution with the membrane
+        C_soln_mem = manning.manning_eql(C_soln,xi,str(charge)+'mol/L')
+        C_co = C_soln_mem.get_amount(coion,'mol/L').magnitude
+        return (C_co - coion_conc)**2
+    
+    from scipy.optimize import minimize
+    result = minimize(solve,1,args=(charge,coion_conc)
+                      ,method='Nelder-Mead',tol=1e-4,options={'maxiter':100,'disp':True})
+    return result.x[0]
+    """
+    pass
 
 
 def manning_eql(solution, xi, fixed_charge):
@@ -99,7 +139,7 @@ def manning_eql(solution, xi, fixed_charge):
     salt = solution.get_salt()
 
     # convert fixed_charge in to a quantity
-    fixed_charge = unit(fixed_charge)
+    fixed_charge = ureg(fixed_charge)
 
     # initialize the equilibrated solution - start with a direct copy of the
     # input / external solution
@@ -127,7 +167,7 @@ def manning_eql(solution, xi, fixed_charge):
         nu_counter = salt.nu_cation
         nu_co = salt.nu_anion
     else:
-        logger.WARNING(
+        warnings.warn(
             "Fixed charge concentration is zero, Donnan equilibrium cannot be \
              established. Returning a copy of the bulk solution."
         )
@@ -246,8 +286,9 @@ def get_activity_coefficient_manning(
     critical value are given by [#]_
 
     TODO update
-    .. math: \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1]
-    exp [{-X \\ over X + 2 \\xi}]
+    $$
+    \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
+    $$
 
     and when the Manning Parameter is less than the critical value, by [#]_
 
@@ -274,12 +315,12 @@ def get_activity_coefficient_manning(
 
     """
     # check to make sure the signs of the input arguments are correct
-    if unit(fixed_charge).magnitude < 0:
+    if ureg(fixed_charge).magnitude < 0:
         if not (z_counter > 0 and z_co < 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."
             )
-    elif unit(fixed_charge).magnitude >= 0:
+    elif ureg(fixed_charge).magnitude >= 0:
         if not (z_counter < 0 and z_co > 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."
@@ -292,7 +333,7 @@ def get_activity_coefficient_manning(
         )
 
     # calculate the ratio of fixed charge to mobile salt concentration
-    X = abs(unit(fixed_charge) / unit(Cs)).magnitude
+    X = abs(ureg(fixed_charge) / ureg(Cs)).magnitude
 
     # calculate the critical value of the Manning parameter
     xi_critical = 1 / abs(z_counter)
@@ -386,29 +427,15 @@ def diffusion_coefficient_manning(
     value are given by [#]_
 
     TODO update
-    .. math: \frac{D_g}{D_g^s} =
+    $$
+        \\frac{D_g}{D_g^s}
+    $$
 
     Where $A$ is equal to
 
-    .. math: \\sum_{m1} \\sum_{m2} [ \\pi |z_g|(m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g \\nu_c)|z_g z_c||z_g| \\xi}{X}]^-2
-
-    Tests
-    -----
-    Multivalent, xi > critical
-    >>> manning.diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.0105 mol/L',0.465,type='co',nu_counter=1,nu_co=2,z_counter=2)
-    0.08872209947492504
-
-    Monoovalent, xi > critical
-    >>> manning.diffusion_coefficient_manning(1.83,'-3.21 mol/L','0.05 mol/L',0.50,type='co')
-    0.09646909589490148
-
-    Monovalent, xi < critical
-    >>> manning.diffusion_coefficient_manning(0.18,'-1.39 mol/L','0.08 mol/L',0.51,type='co')
-    0.11645435790753468
-
-    Monovalent with AEM, xi > critical
-    >>> manning.diffusion_coefficient_manning(2.21,'3.58 mol/L','0.004 mol/L',0.405,type='co',nu_counter=1,nu_co=1,z_counter=-1,z_co=1)
-    0.055822613199559216
+    $$
+        \\sum_{m1} \\sum_{m2} [ \\pi |z_g|(m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g \\nu_c)|z_g z_c||z_g| \\xi}{X}]^-2
+    $$
 
     References
     ----------
@@ -427,19 +454,19 @@ def diffusion_coefficient_manning(
 
     """
     # check to make sure the signs of the input arguments are correct
-    if unit(fixed_charge).magnitude < 0:
+    if ureg(fixed_charge).magnitude < 0:
         if not (z_counter > 0 and z_co < 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."
             )
-    elif unit(fixed_charge).magnitude >= 0:
+    elif ureg(fixed_charge).magnitude >= 0:
         if not (z_counter < 0 and z_co > 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."
             )
 
     # calculate the ratio of fixed charge to mobile salt concentration
-    X = abs(unit(fixed_charge) / unit(Cs)).magnitude
+    X = abs(ureg(fixed_charge) / ureg(Cs)).magnitude
 
     # calculate the critical value of the Manning parameter
     xi_critical = 1 / abs(z_counter)
@@ -514,7 +541,9 @@ def _A(x, y, nu_counter=1, nu_co=1, z_counter=1, z_co=-1):
 
     The function A(x,y) is given by [#]_ [#]_ [#]_
 
-    .. math: \\sum_{m1} \\sum_{m2} [ \\frac{\\pi}{x} (m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g + \\nu_c)|z_g z_c|}{y}]^-2
+    $$
+        \\sum_{m1} \\sum_{m2} [ \\frac{\\pi}{x} (m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g + \\nu_c)|z_g z_c|}{y}]^-2
+    $$
 
     When $\\xi$ is greater than the critical value, $x=\\frac{1}{|z_g|}$ and $y=\\frac{X}{\\xi |z_g|}$.
     If $\\xi$ is lower than the critical value (counter-ion condensation does not occur), then
@@ -614,8 +643,9 @@ def beta(
     thermodynamic factors are given by [#]_
 
     TODO update
-    .. math: \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1]
-    exp [{-X \\ over X + 2 \\xi}]
+    $$
+        \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
+    $$
 
     and when the Manning Parameter is less than the critical value, by [#]_
 
@@ -623,13 +653,13 @@ def beta(
     """
 
     # check to make sure the signs of the input arguments are correct
-    if unit(fixed_charge).magnitude < 0:
+    if ureg(fixed_charge).magnitude < 0:
         if not (z_counter > 0 and z_co < 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and \
                 co-ion. Aborting."
             )
-    elif unit(fixed_charge).magnitude >= 0:
+    elif ureg(fixed_charge).magnitude >= 0:
         if not (z_counter < 0 and z_co > 0):
             raise Exception(
                 "Mismatch between signs of fixed charge, counter-ion, and \
@@ -647,26 +677,26 @@ def beta(
         if type == "counter":
             beta_counter = (
                 1
-                + unit(fixed_charge)
+                + ureg(fixed_charge)
                 * (1 - 1 / abs(z_counter) / xi)
                 / (
-                    unit(fixed_charge) / abs(z_counter) / xi
-                    + abs(z_counter) * nu_counter * unit(Cs)
+                    ureg(fixed_charge) / abs(z_counter) / xi
+                    + abs(z_counter) * nu_counter * ureg(Cs)
                 )
                 + (nu_counter + nu_co)
                 * abs(z_counter)
                 * xi
-                * unit(fixed_charge)
-                * unit(C_counter)
+                * ureg(fixed_charge)
+                * ureg(C_counter)
                 / (
                     2
                     * (
-                        unit(fixed_charge)
+                        ureg(fixed_charge)
                         + abs(z_counter)
                         * nu_counter
                         * (nu_counter + nu_co)
                         * xi
-                        * unit(Cs)
+                        * ureg(Cs)
                     )
                     ** 2
                 )
@@ -683,11 +713,11 @@ def beta(
                 * nu_counter
                 * (nu_co + nu_counter)
                 * xi
-                * unit(fixed_charge)
-                * unit(Cs)
+                * ureg(fixed_charge)
+                * ureg(Cs)
                 / (
-                    unit(fixed_charge)
-                    + abs(z_counter) * nu_counter * (nu_co + nu_counter) * xi * unit(Cs)
+                    ureg(fixed_charge)
+                    + abs(z_counter) * nu_counter * (nu_co + nu_counter) * xi * ureg(Cs)
                 )
                 ** 2
             )

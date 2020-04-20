@@ -3,3 +3,4 @@ pymatgen
 monty
 maggma
 pint
+pyEQL

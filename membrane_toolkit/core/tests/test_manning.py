@@ -7,9 +7,10 @@ Tests for the Manning theory library
 """
 
 import pytest
+import pyEQL
 from numpy import allclose
 
-from membrane_toolkit.core.manning import (
+from membrane_toolkit.core import (
     get_activity_coefficient_manning,
     diffusion_coefficient_manning,
     manning_eql,

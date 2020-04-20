@@ -4,6 +4,9 @@
 
 # Membrane class definitions
 
+from membrane_toolkit.core.unitized import ureg
+import numpy as np
+
 
 class Membrane:
     """
@@ -114,7 +117,7 @@ class Membrane:
         #    else:
         #       SD = swelling_degree
 
-        #    FCD = unit(self.IEC) / unit(SD) * unit('0.998 g/mL')
+        #    FCD = ureg(self.IEC) / ureg(SD) * ureg('0.998 g/mL')
 
         #        return str(FCD.to('mol/L'))
         return self.FCD
@@ -159,15 +162,16 @@ class Membrane:
         -----
         The Manning Parameter is defined as [#]:
 
-        .. math:: \\psi = e^2 \\over {4 \\pi \\epsilon_0 \\epsilon k_b T b}
+        $$ \\psi = e^2 \\over {4 \\pi \\epsilon_0 \\epsilon k_b T b} $$
 
         where b is the average distance between fixed charge groups, calculated
         here based on the fixed charge concentration and the lattice distance.
 
-        References
-        ----------
-        .. [#] J. Kamcev, D. R. Paul and B. D. Freeman, Macromolecules, 2015, acs.macromol.5b01654.
-        .. [#] J. Kamcev, M. Galizia, F. M. Benedetti, E.-S. Jang, D. R. Paul, B. Freeman and G. S. Manning, Phys. Chem. Chem. Phys., 2016.
+        References:
+            J. Kamcev, D. R. Paul and B. D. Freeman, Macromolecules, 2015, acs.macromol.5b01654.
+
+            J. Kamcev, M. Galizia, F. M. Benedetti, E.-S. Jang, D. R. Paul, B. Freeman and G. S. Manning,
+               Phys. Chem. Chem. Phys., 2016.
 
         See Also
         --------
@@ -180,18 +184,18 @@ class Membrane:
 
         # TODO - should the units of fixed charge be mol/L membrane or per L of absorbed water?
 
-        b = (abs(unit(self.get_fixed_charge_density()).to("mol/L")) * unit.N_A) ** (
+        b = (abs(ureg(self.get_fixed_charge_density()).to("mol/L")) * ureg.N_A) ** (
             -1 / 3
         )
-        temperature = unit(temperature)
+        temperature = ureg(temperature)
 
         # calculate the manning parameters
-        manning = unit.e ** 2 / (
+        manning = ureg.e ** 2 / (
             4
-            * math.pi
-            * unit.epsilon_0
+            * np.pi
+            * ureg.epsilon_0
             * self.get_dielectric_constant()
-            * unit.k
+            * ureg.k
             * temperature
             * b
         )
