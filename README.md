@@ -1,9 +1,5 @@
-How to represent different solvents? AqueousSolution / OrganicSolution / Vapor / Gas?
+## membrane-toolkit
 
-Main class is a differential slice of bulk | int | mem | int | bulk
-Another class to add length to it (integrate flux in 2D)
-Another class to build modules and/or processes
+[![testing](https://github.com/rkingsbury/membrane-toolkit/workflows/testing/badge.svg)](https://github.com/rkingsbury/membrane-toolkit/actions?query=workflow%3Atesting) [![codecov](https://codecov.io/gh/rkingsbury/membrane-toolkit/branch/master/graph/badge.svg)](https://codecov.io/gh/rkingsbury/membrane-toolkit) [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/rkingsbury/membrane-toolkit.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rkingsbury/membrane-toolkit/context:python)[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
-
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) 
+Python tools for membrane science.
