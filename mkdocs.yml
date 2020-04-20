@@ -1,0 +1,36 @@
+site_name: membrane-toolkit Documentation
+site_description: Documentation for membrane-toolkit, Python tools for membrane science.
+copyright: Ryan Kingsbury
+
+theme:
+  name: 'material'
+
+nav:
+  - Home: index.md
+  - Core Functions: core_functions/core_functions.md
+  - Getting Started:
+
+repo_url: https://github.com/rkingsbury/membrane-toolkit
+docs_dir: ./docs
+markdown_extensions:
+  - admonition
+  - codehilite
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - mdx_math
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - minify
+  - mkdocstrings:
+      watch:
+        - membrane_toolkit
+
+extra_javascript:
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+  - mathjaxhelper.js
+
