@@ -5,6 +5,7 @@
 """
 Membrane potential related methods
 """
+import numpy as np
 
 
 def apparent_permselectivity(
