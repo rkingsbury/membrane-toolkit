@@ -67,7 +67,7 @@ jobs:
         CONTINUOUS_INTEGRATION: True
       run: |
         pip install -e .
-        pytest --cov=membrane-toolkit --cov-report=xml
+        pytest --cov=membrane_toolkit --cov-report=xml
     - uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
