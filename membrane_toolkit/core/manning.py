@@ -75,7 +75,7 @@ def solve_manning_param(charge,coion_conc):
         C_soln_mem = manning.manning_eql(C_soln,xi,str(charge)+'mol/L')
         C_co = C_soln_mem.get_amount(coion,'mol/L').magnitude
         return (C_co - coion_conc)**2
-    
+
     from scipy.optimize import minimize
     result = minimize(solve,1,args=(charge,coion_conc)
                       ,method='Nelder-Mead',tol=1e-4,options={'maxiter':100,'disp':True})

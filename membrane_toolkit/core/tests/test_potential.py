@@ -7,7 +7,7 @@ Tests for membrane potential methods
 """
 import pytest
 
-from membrane_toolkit.core.potential import *
+from membrane_toolkit.core.potential import apparent_permselectivity, nernst_potential
 
 
 def test_apparent_permselectivity():

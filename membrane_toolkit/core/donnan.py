@@ -33,7 +33,7 @@ def equilibrate_donnan(
 
     def solve_donnan(C_co):
         # calculate the counter-ion concentration
-        C_counter = (-z_co * C_co - z_fix * C_fix) / z_counter
+        # C_counter = (-z_co * C_co - z_fix * C_fix) / z_counter
         # calculate the activities
         # TODO make these functions of the respective concentrations
         a_co = 1

@@ -9,7 +9,11 @@ import pytest
 from pint import DimensionalityError
 
 from membrane_toolkit.core.unitized import ureg
-from membrane_toolkit.core.unitized import *
+from membrane_toolkit.core.unitized import (
+    diffusion_coefficient_mackie_meares,
+    apparent_permselectivity,
+    nernst_potential,
+)
 
 
 def test_diffusion_coefficient_mackie_meares():
@@ -30,7 +34,7 @@ def test_apparent_permselectivity():
     q2 = ureg.Quantity("-40 mV")
     q3 = ureg.Quantity("0.5 dimensionless")
     assert apparent_permselectivity(q1, q2, q3).magnitude == pytest.approx(0.75)
-    assert apparent_permselectivity(q1, q2, q3).check(['dimensionless'])
+    assert apparent_permselectivity(q1, q2, q3).check(["dimensionless"])
     with pytest.raises(ValueError):
         apparent_permselectivity(30, q2)
     with pytest.raises(DimensionalityError):
@@ -45,9 +49,9 @@ def test_nernst_potential():
     q5 = ureg.Quantity(30, ureg.degC)
     q6 = ureg.Quantity(25, ureg.degC)
     assert nernst_potential(q1, q2, 1, q6).magnitude == pytest.approx(0.05916, abs=1e-5)
-    assert nernst_potential(q1, q2, 1, q6).units == 'volt'
+    assert nernst_potential(q1, q2, 1, q6).units == "volt"
     assert nernst_potential(q3, q4, 1, q5).magnitude == pytest.approx(0.04204, abs=1e-5)
-    assert nernst_potential(q3, q4, 1, q5).units == 'volt'
+    assert nernst_potential(q3, q4, 1, q5).units == "volt"
     with pytest.raises(ValueError):
         nernst_potential(1, 0.1)
     with pytest.raises(DimensionalityError):

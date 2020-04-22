@@ -7,7 +7,7 @@ Tests for diffusion coefficient methods
 """
 import pytest
 
-from membrane_toolkit.core.diffusion import *
+from membrane_toolkit.core.diffusion import diffusion_coefficient_mackie_meares
 
 
 def test_diffusion_coefficient_mackie_meares():

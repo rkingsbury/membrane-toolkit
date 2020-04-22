@@ -11,7 +11,11 @@ computations in base SI units unless there is a specific reason (performance,
 numerical stability, etc.) to do otherwise.
 """
 from pint import UnitRegistry
-from membrane_toolkit.core import *
+from membrane_toolkit.core import (
+    diffusion_coefficient_mackie_meares,
+    apparent_permselectivity,
+    nernst_potential,
+)
 
 ureg = UnitRegistry()
 
