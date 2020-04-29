@@ -10,6 +10,7 @@ nav:
   - Core Functions: core_functions/core_functions.md
 
 repo_url: https://github.com/rkingsbury/membrane-toolkit
+site_url: https://membrane-toolkit.readthedocs.io
 docs_dir: ./membrane_toolkit/docs
 site_dir: ./docs
 markdown_extensions:

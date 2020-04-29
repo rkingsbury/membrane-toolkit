@@ -34,5 +34,5 @@ python setup.py install
 pip install git+https://github.com/rkingsbury/membrane-toolkit
 ```
 
-Please note that this project is released with a Contributor [Code of Conduct](../CODE_OF_CONDUCT.md). By participating in this project you 
+Please note that this project is released with a Contributor [Code of Conduct](https://github.com/rkingsbury/membrane-toolkit/blob/master/CODE_OF_CONDUCT.MD). By participating in this project you 
 agree to abide by its terms.
