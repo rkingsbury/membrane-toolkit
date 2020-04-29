@@ -19,6 +19,9 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.inlinehilite
+  - mdx_math:
+      enable_dollar_delimiter: True
+      add_preview: True
   - toc:
       permalink: true
 

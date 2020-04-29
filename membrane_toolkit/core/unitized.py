@@ -15,6 +15,7 @@ from membrane_toolkit.core import (
     diffusion_coefficient_mackie_meares,
     apparent_permselectivity,
     nernst_potential,
+    donnan_equilibrium,
 )
 
 ureg = UnitRegistry()
@@ -24,6 +25,12 @@ ureg = UnitRegistry()
 diffusion_coefficient_mackie_meares = ureg.wraps(
     "m ** 2 / s", ("m ** 2 / s", ureg.dimensionless,)
 )(diffusion_coefficient_mackie_meares)
+
+# donnan.py
+
+donnan_equilibrium = ureg.wraps(
+    "mol/L", ("mol/L", "mol/L", None, None, None, None, None, None)
+)(donnan_equilibrium)
 
 # potential.py
 

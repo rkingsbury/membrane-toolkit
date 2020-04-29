@@ -12,6 +12,6 @@ methods accept and return pint Quantity objects as arguments.
 
 from .diffusion import *
 from .potential import *
-from .manning import *
 from .donnan import *
 from .flory_huggins import *
+from .manning import *

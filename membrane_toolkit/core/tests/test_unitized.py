@@ -13,6 +13,7 @@ from membrane_toolkit.core.unitized import (
     diffusion_coefficient_mackie_meares,
     apparent_permselectivity,
     nernst_potential,
+    donnan_equilibrium
 )
 
 
@@ -43,7 +44,7 @@ def test_apparent_permselectivity():
 
 def test_nernst_potential():
     q1 = ureg.Quantity("1 mol/L")
-    q2 = ureg.Quantity("0.1 mol/L")
+    q2 = ureg.Quantity("100 mmol/L")
     q3 = ureg.Quantity("0.5 dimensionless")
     q4 = ureg.Quantity("0.1 dimensionless")
     q5 = ureg.Quantity(30, ureg.degC)
@@ -56,3 +57,15 @@ def test_nernst_potential():
         nernst_potential(1, 0.1)
     with pytest.raises(DimensionalityError):
         nernst_potential(q3, q2)
+
+
+def test_donnan_equilibrium():
+    Cs = ureg.Quantity("0.5 mol/L")
+    Cfix = ureg.Quantity("4 mol/L")
+    q3 = ureg.Quantity("0.5 m")
+    q4 = ureg.Quantity("-4 m")
+    assert donnan_equilibrium(Cs, Cfix).magnitude == pytest.approx(0.061553, abs=1e-5)
+    with pytest.raises(ValueError):
+        donnan_equilibrium(0.5, Cfix)
+    with pytest.raises(DimensionalityError):
+        donnan_equilibrium(q3, q4)
