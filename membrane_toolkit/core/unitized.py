@@ -35,7 +35,7 @@ donnan_equilibrium = ureg.wraps(
 # potential.py
 
 apparent_permselectivity = ureg.wraps(
-    ureg.dimensionless, ("V", "V", ureg.dimensionless)
+    ureg.dimensionless, ("V", "V", None)
 )(apparent_permselectivity)
 
 nernst_potential = ureg.wraps("V", ("=A", "=A", None, "degC"))(nernst_potential)

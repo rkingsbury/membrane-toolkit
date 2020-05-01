@@ -3,4 +3,8 @@ pymatgen
 monty
 maggma
 pint
+# required by pint if you want uncertainty propagation
+uncertainties
 pyEQL
+# scipy required by the donnan_equilibrium method
+scipy

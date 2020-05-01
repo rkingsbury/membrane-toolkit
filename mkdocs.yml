@@ -13,6 +13,7 @@ repo_url: https://github.com/rkingsbury/membrane-toolkit
 site_url: https://membrane-toolkit.readthedocs.io
 docs_dir: ./membrane_toolkit/docs
 site_dir: ./docs
+copyright: 2020 Ryan Kingsbury
 markdown_extensions:
   - admonition
   - codehilite

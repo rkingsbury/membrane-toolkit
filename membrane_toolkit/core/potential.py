@@ -9,9 +9,7 @@ import numpy as np
 
 
 def apparent_permselectivity(
-    E_mem: float,
-    E_ideal: float,
-    t_counter: float = 0.5,
+    E_mem: float, E_ideal: float, t_counter: float = 0.5,
 ) -> float:
     """
     Calculate the apparent permselectivity of a membrane from the membrane potential.
@@ -32,10 +30,10 @@ def apparent_permselectivity(
         permselectivity is calculated from the membrane potential and differs from the
         "true" permselectivity. The equation is:
 
-        .. math::
-
+        $$
             \\alpha_{app} = \\frac{\\frac{E_{mem}}{E_{ideal}} + 1 - 2 t_{counter}}
                 {2 t_{co}}
+        $$
 
     References:
         Kingsbury, R. S.; Coronell, O. Modelling and validation of concentration
@@ -92,15 +90,21 @@ def nernst_potential(
         synthetic ion exchange memebranes. J. Electrochem. Soc 1953, 100 (4), 178–184.
     """
     if a0 < 0:
-        raise ValueError("Received invalid activity argument of a0 = {}. Electrolyte"
-                         "activity must be positive.".format(a0))
+        raise ValueError(
+            "Received invalid activity argument of a0 = {}. Electrolyte"
+            "activity must be positive.".format(a0)
+        )
 
     if aL < 0:
-        raise ValueError("Received invalid activity argument of aL = {}. Electrolyte"
-                         "activity must be positive.".format(aL))
+        raise ValueError(
+            "Received invalid activity argument of aL = {}. Electrolyte"
+            "activity must be positive.".format(aL)
+        )
 
     if temperature < -273.15:
-        raise ValueError("Received invalid temperature argument of {}. Temperature"
-                         "is below absolute zero!".format(temperature))
+        raise ValueError(
+            "Received invalid temperature argument of {}. Temperature"
+            "is below absolute zero!".format(temperature)
+        )
 
-    return 8.314 * (temperature + 273.15) / z_ct / 96485 * np.log(a0/aL)
+    return 8.314 * (temperature + 273.15) / z_ct / 96485 * np.log(a0 / aL)
