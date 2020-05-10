@@ -4,7 +4,7 @@
 
 membrane-toolkit is a suite of Python tools for membrane science.
 
-Maggma is written in [Python](http://docs.python-guide.org/en/latest/) and supports Python 3.+.
+membrane-toolkit is written in [Python](http://docs.python-guide.org/en/latest/) and supports Python 3.+.
 
 ## Installation from PyPI
 

@@ -58,7 +58,7 @@ def donnan_equilibrium(
         (dimensionless) is the ratio of activity coefficients in the bulk solution to those in the membrane, given by:
 
         $$
-        \\Gamma = \\frac{\gamma_{\\pm}^{\\nu_{ct} + \
+        \\Gamma = \\frac{\\gamma_{\\pm}^{\\nu_{ct} + \
             \\nu_{co}}}{\\bar \\gamma_{ct}^{\\nu_{ct}} \\bar \\gamma_{co}^{\\nu_{co}}}
         $$
 
