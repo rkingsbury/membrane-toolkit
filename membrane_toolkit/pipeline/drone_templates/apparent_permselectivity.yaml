@@ -1,0 +1,14 @@
+# Apparent Permselectivity measurement
+Sheet1:
+  date: B3
+  person: B7
+  sample_id: B5
+  membrane: B4
+  temperature: B6
+  electrode_offset: B8
+  salt_1: B9
+  conc_1: B10
+  salt_2: B11
+  conc_2: B12
+  membrane_potential: B13
+  notes: B14

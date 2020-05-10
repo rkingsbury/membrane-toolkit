@@ -8,3 +8,7 @@ uncertainties
 pyEQL
 # scipy required by the donnan_equilibrium method
 scipy
+# required by PandasStore
+pandas
+# required by ExcelBuilder
+openpyxl
