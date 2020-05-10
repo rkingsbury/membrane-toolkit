@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
-     <loc>https://membrane-toolkit.readthedocs.io/</loc>
-     <lastmod>2020-05-01</lastmod>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/</loc>
+     <lastmod>2020-05-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>https://membrane-toolkit.readthedocs.io/core_functions/core_functions/</loc>
-     <lastmod>2020-05-01</lastmod>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/install/</loc>
+     <lastmod>2020-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/core_functions/diffusion/</loc>
+     <lastmod>2020-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/core_functions/donnan/</loc>
+     <lastmod>2020-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/core_functions/manning/</loc>
+     <lastmod>2020-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/core_functions/potential/</loc>
+     <lastmod>2020-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://rkingsbury.github.io/membrane-toolkit/develop/</loc>
+     <lastmod>2020-05-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

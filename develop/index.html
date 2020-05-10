@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="ie=edge" http-equiv="x-ua-compatible"/>
+<meta content="Documentation for membrane-toolkit, Python tools for membrane science." name="description"/>
+<link href="https://rkingsbury.github.io/membrane-toolkit/develop/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="shortcut icon"/>
+<meta content="mkdocs-1.1, mkdocs-material-components-1.10.11" name="generator"/>
+<title>For Developers - membrane-toolkit Documentation</title>
+<script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+<link href="../assets/stylesheets/application-2cd7d9ab0f.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/material-components-web.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/mdc-web.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Open Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Ubuntu+Mono" rel="stylesheet"/>
+<style>body,input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Ubuntu Mono","Courier New",Courier,monospace}</style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js"></script>
+</head>
+<body>
+<svg class="md-svg">
+<defs>
+<svg height="448" id="github" viewbox="0 0 416 448" width="416" xmlns="http://www.w3.org/2000/svg"><path d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z" fill="currentColor"></path></svg>
+</defs>
+</svg>
+<input class="md-toggle" data-md-toggle="drawer" id="drawer" type="checkbox"/>
+<input class="md-toggle" data-md-toggle="search" id="search" type="checkbox"/>
+<label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+<header class="md-header" data-md-component="header">
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<div class="md-flex__cell md-flex__cell--shrink md-flex__cell--vmiddle">
+<a class="md-header-nav__button md-logo" href="https://rkingsbury.github.io/membrane-toolkit/" title="membrane-toolkit Documentation">
+<img height="36" src="../assets/images/logo_white.png" width="36"/>
+</a>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch">
+<span class="md-flex__ellipsis md-header-nav__title">
+          
+            membrane-toolkit Documentation -
+            
+              
+            
+            For Developers
+          
+        </span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="search"></label>
+<div class="md-search__inner">
+<form class="md-search__form" name="search">
+<input autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-icon md-search__icon" for="search"></label>
+<button class="md-icon md-search__icon" data-md-component="reset" type="reset"></button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
+<div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<div class="md-header-nav__source">
+<a class="md-source" data-md-source="github" href="https://github.com/rkingsbury/membrane-toolkit/" title="Go to repository">
+<div class="md-source__icon">
+<svg height="24" viewbox="0 0 24 24" width="24">
+<use height="24" width="24" xlink:href="#github"></use>
+</svg>
+</div>
+<div class="md-source__repository">
+      GitHub
+    </div>
+</a>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title md-nav__title--site" for="drawer">
+<div class="md-nav__button md-logo">
+<i class="md-icon md-icon--home"></i>
+</div>
+    membrane-toolkit Documentation
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-source="github" href="https://github.com/rkingsbury/membrane-toolkit/" title="Go to repository">
+<div class="md-source__icon">
+<svg height="24" viewbox="0 0 24 24" width="24">
+<use height="24" width="24" xlink:href="#github"></use>
+</svg>
+</div>
+<div class="md-source__repository">
+      GitHub
+    </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="" title="Home">
+      Home
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="install/" title="Installation">
+      Installation
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3">
+      Core Functions
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+<label class="md-nav__title" for="nav-3">
+        Core Functions
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="core_functions/diffusion/" title="Diffusion">
+      Diffusion
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="core_functions/donnan/" title="Donnan Exclusion">
+      Donnan Exclusion
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="core_functions/manning/" title="Manning Theory">
+      Manning Theory
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="core_functions/potential/" title="Electrochemical">
+      Electrochemical
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="pipeline/pipeline.md" title="Data Pipeline">
+      Data Pipeline
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-toggle md-nav__toggle" data-md-toggle="toc" id="toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="toc">
+        For Developers
+      </label>
+<a class="md-nav__link md-nav__link--active" href="develop/" title="For Developers">
+      For Developers
+    </a>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title md-nav__toc" for="toc">Table of contents</label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#code-organization" title="Code Organization">
+    Code Organization
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#coding-concepts" title="Coding Concepts">
+    Coding Concepts
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-third-party-libraries" title="Key third-party libraries">
+    Key third-party libraries
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#coding-guidelines" title="Coding Guidelines">
+    Coding Guidelines
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title md-nav__toc" for="toc">Table of contents</label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#code-organization" title="Code Organization">
+    Code Organization
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#coding-concepts" title="Coding Concepts">
+    Coding Concepts
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-third-party-libraries" title="Key third-party libraries">
+    Key third-party libraries
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#coding-guidelines" title="Coding Guidelines">
+    Coding Guidelines
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" id="article-content">
+<article class="md-content__inner md-typeset">
+<a class="md-icon md-content__icon" href="https://github.com/rkingsbury/membrane-toolkit/edit/master/docs/develop.md" title="Edit this page"></a>
+<h1 id="contributing-to-membrane-toolkit">Contributing to membrane-toolkit<a class="headerlink" href="#contributing-to-membrane-toolkit" title="Permanent link">¶</a></h1>
+<p>We welcome contributions of all kinds, from reporting bugs or requesting features via a
+<a href="https://github.com/rkingsbury/membrane-toolkit/issues">Github issue</a> to contributing
+documentation and examples to hacking the code and submitting a pull request. Please note
+that membrane-toolkit is released with a Contributor
+<a href="https://github.com/rkingsbury/membrane-toolkit/blob/master/CODE_OF_CONDUCT.MD">Code of Conduct</a>.
+By participating in this project you agree to abide by its terms.</p>
+<h3 id="code-organization">Code Organization<a class="headerlink" href="#code-organization" title="Permanent link">¶</a></h3>
+<p>Core - fully documented, thoroughly tested, standalone functions for key calculations,
+    implemented with floating point math and available in unitized versions with Quantity support</p>
+<h3 id="coding-concepts">Coding Concepts<a class="headerlink" href="#coding-concepts" title="Permanent link">¶</a></h3>
+<p>membrane-toolkit is designed to work closely with the family of codes maintained by
+<a href="https://github.com/materialsproject/">The Materials Project</a>. In particular, 
+we follow the major architectural decisions of the 
+<a href="https://github.com/materialsproject/pymatgen">pymatgen</a> maintainers regarding
+coding style, test framework, Python compatbility, etc. </p>
+<h3 id="key-third-party-libraries">Key third-party libraries<a class="headerlink" href="#key-third-party-libraries" title="Permanent link">¶</a></h3>
+<p>Wherever possible, we 
+import functionality from pymatgen or other codes rather than duplicate 
+functionality. For example, we use pymatgen's <code>Composition</code> class to represent 
+chemical information about different materials. If you are new to this family 
+of codes, it will be especially helpful to familiarize yourself with the 
+following methods and packages, in addition to standard scientific Python codes
+like numpy and scipy:</p>
+<ul>
+<li><code>MSONable</code>, <code>loadfn</code> and <code>dumpfn</code> serialization routines from the
+   <a href="https://github.com/materialsvirtuallab/monty">monty</a> package</li>
+<li>Units-aware computation using <a href="https://pint.readthedocs.io/en/0.9/">pint</a>
+   Quantity objects.</li>
+<li><code>Element</code>, <code>Specie</code>, and <code>Composition</code> classes from 
+   <a href="https://github.com/materialsproject/pymatgen">pymatgen</a></li>
+<li>String operations in <a href="https://github.com/materialsproject/pymatgen/blob/2a813c172f3be38efc3205a102021eaba1da156f/pymatgen/util/string.py">pymatgen.util.string</a></li>
+<li>Type Hinting functionality in the 
+   <a href="https://docs.python.org/3/library/typing.html">typing</a> module</li>
+<li><code>Builder</code> class from <a href="https://github.com/materialsproject/maggma">maggma</a></li>
+</ul>
+<h2 id="coding-guidelines">Coding Guidelines<a class="headerlink" href="#coding-guidelines" title="Permanent link">¶</a></h2>
+<p>To ensure the long-term sustainability of the membrane-toolkit codebase, we enforce very
+strict quality control standards for all contributions. Specifically, all new
+code must adhere to the following:</p>
+<ol>
+<li>
+<p><strong>Tests</strong> are required for all new modules and methods. The only way to
+   minimize regression and ensure confidence in membrane-toolkit's calculations is to 
+   thoroughly test all code. If the maintainer cannot test your code, 
+   the contribution will be rejected. Test should conform to the following schema:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">*</span> <span class="k">Use</span> <span class="p">[</span><span class="n">pytest</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">docs</span><span class="p">.</span><span class="n">pytest</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="n">en</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">Place</span> <span class="n">tests</span> <span class="k">in</span> <span class="n">files</span> <span class="n">named</span> <span class="ss">`test_xxxx.py`</span> <span class="k">in</span> <span class="n">a</span> <span class="ss">`tests`</span> <span class="n">subdirectory</span> 
+  <span class="n">of</span> <span class="n">the</span> <span class="n">directory</span> <span class="k">where</span> <span class="n">your</span> <span class="n">code</span> <span class="n">resides</span><span class="p">.</span>
+<span class="o">*</span> <span class="k">If</span> <span class="n">your</span> <span class="n">test</span> <span class="n">requires</span> <span class="n">external</span> <span class="n">files</span><span class="p">,</span> <span class="n">place</span> <span class="n">those</span> <span class="k">in</span> <span class="ss">`test_files`</span> <span class="k">in</span>
+  <span class="n">the</span> <span class="n">root</span> <span class="n">membrane</span><span class="o">-</span><span class="n">toolkit</span> <span class="n">directory</span><span class="p">.</span>
+<span class="o">*</span> <span class="n">Test</span> <span class="k">all</span> <span class="n">realistic</span> <span class="n">combinations</span> <span class="n">of</span> <span class="n">input</span> <span class="n">arguments</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Documentation</strong> required for all modules, classes and methods. In
+   particular:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">*</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="k">method</span><span class="w"> </span><span class="n">docstrings</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">explain</span><span class="w"> </span><span class="ow">ALL</span><span class="w"> </span><span class="n">required</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">optional</span><span class="w"></span>
+<span class="w">  </span><span class="n">arguments</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">values</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="n">Methods</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">docstrings</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="k">use</span><span class="w"> </span>
+<span class="w">  </span><span class="o">[</span><span class="n">TypeHinting</span><span class="o">]</span><span class="p">(</span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">docs</span><span class="p">.</span><span class="n">python</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">typing</span><span class="p">.</span><span class="n">html</span><span class="p">)</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="k">Use</span><span class="w"> </span><span class="o">[</span><span class="n">Google-style</span><span class="o">]</span><span class="p">(</span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">google</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="o">/</span><span class="n">styleguide</span><span class="o">/</span><span class="n">pyguide</span><span class="p">.</span><span class="n">html</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">docstrings</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="k">Include</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="err">`</span><span class="k">References</span><span class="err">:`</span><span class="w"> </span><span class="k">section</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">citations</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">appropriate</span><span class="w"></span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>PyCodeStyle</strong>, <strong>flake8</strong>, and <strong>mypy</strong> are used to lint (check) all code, and
+   all code is expected to adhere to this style. To make linting less tedious, we
+   use <a href="https://github.com/psf/black">black</a> to automatically format all files.
+   We highly recommend that you install black and pycodestyle in your IDE to 
+   check your code style BEFORE submitting a pull request.</p>
+</li>
+<li>
+<p><strong>Python 3</strong>. We only support Python 3.7+.</p>
+</li>
+</ol>
+<p>If in doubt about any of the above, please refer to the source code in <code>membrane_toolkit.core</code> for
+examples of what is expected.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="core_functions/potential/" rel="prev" title="Electrochemical">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Electrochemical
+              </span>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+            2020 Ryan Kingsbury
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://yakworks.github.io/mkdocs-material-components/" title="Material Components for MkDocs">
+          Material Components for MkDocs</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<script src="../assets/javascripts/application-68832431b5.js"></script>
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<script>window.mdc.autoInit()</script>
+<script src="../assets/javascripts/headroom.min.js"></script>
+<script src="../assets/javascripts/jQuery.headroom.min.js"></script>
+<script src="../assets/javascripts/jq-mdc-web.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay.min.js"></script>
+<script>app.initialize({version:"1.1",url:{base:".."}})</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<script src="../mathjaxhelper.js"></script>
+</body>
+</html>

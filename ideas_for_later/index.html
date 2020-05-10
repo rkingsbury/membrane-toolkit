@@ -7,14 +7,14 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="ie=edge" http-equiv="x-ua-compatible"/>
 <meta content="Documentation for membrane-toolkit, Python tools for membrane science." name="description"/>
-<link href="https://rkingsbury.github.io/membrane-toolkit/" rel="canonical"/>
-<link href="./assets/images/favicon.png" rel="shortcut icon"/>
+<link href="https://rkingsbury.github.io/membrane-toolkit/ideas_for_later/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="shortcut icon"/>
 <meta content="mkdocs-1.1, mkdocs-material-components-1.10.11" name="generator"/>
-<title>membrane-toolkit Documentation</title>
-<script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
-<link href="./assets/stylesheets/application-2cd7d9ab0f.css" rel="stylesheet"/>
-<link href="./assets/stylesheets/material-components-web.min.css" rel="stylesheet"/>
-<link href="./assets/stylesheets/mdc-web.css" rel="stylesheet"/>
+<title>Ideas for later - membrane-toolkit Documentation</title>
+<script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+<link href="../assets/stylesheets/application-2cd7d9ab0f.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/material-components-web.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/mdc-web.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css?family=Open Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Ubuntu+Mono" rel="stylesheet"/>
 <style>body,input{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Ubuntu Mono","Courier New",Courier,monospace}</style>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
@@ -36,7 +36,7 @@
 <div class="md-flex">
 <div class="md-flex__cell md-flex__cell--shrink md-flex__cell--vmiddle">
 <a class="md-header-nav__button md-logo" href="https://rkingsbury.github.io/membrane-toolkit/" title="membrane-toolkit Documentation">
-<img height="36" src="./assets/images/logo_white.png" width="36"/>
+<img height="36" src="../assets/images/logo_white.png" width="36"/>
 </a>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
@@ -49,7 +49,7 @@
             
               
             
-            Home
+            Ideas for later
           
         </span>
 </div>
@@ -119,38 +119,10 @@
 </a>
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-toggle md-nav__toggle" data-md-toggle="toc" id="toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="toc">
-        Home
-      </label>
-<a class="md-nav__link md-nav__link--active" href="" title="Home">
+<li class="md-nav__item">
+<a class="md-nav__link" href="" title="Home">
       Home
     </a>
-<nav class="md-nav md-nav--secondary">
-<label class="md-nav__title md-nav__toc" for="toc">Table of contents</label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#what-is-membrane-toolkit" title="What is membrane-toolkit?">
-    What is membrane-toolkit?
-  </a>
-<nav class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#as-a-calculator" title="As a Calculator">
-    As a Calculator
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#as-an-automatic-data-aggregator" title="As an automatic Data Aggregator">
-    As an automatic Data Aggregator
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="install/" title="Installation">
@@ -212,23 +184,9 @@
 <label class="md-nav__title md-nav__toc" for="toc">Table of contents</label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#what-is-membrane-toolkit" title="What is membrane-toolkit?">
-    What is membrane-toolkit?
+<a class="md-nav__link" href="#key-classes" title="Key Classes">
+    Key Classes
   </a>
-<nav class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#as-a-calculator" title="As a Calculator">
-    As a Calculator
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#as-an-automatic-data-aggregator" title="As an automatic Data Aggregator">
-    As an automatic Data Aggregator
-  </a>
-</li>
-</ul>
-</nav>
 </li>
 </ul>
 </nav>
@@ -237,62 +195,28 @@
 </div>
 <div class="md-content" id="article-content">
 <article class="md-content__inner md-typeset">
-<a class="md-icon md-content__icon" href="https://github.com/rkingsbury/membrane-toolkit/edit/master/docs/index.md" title="Edit this page"></a>
-<h1 id="membrane-toolkit">membrane-toolkit<a class="headerlink" href="#membrane-toolkit" title="Permanent link">¶</a></h1>
-<p><a href="https://github.com/rkingsbury/membrane-toolkit/actions?query=workflow%3Atesting"><img alt="testing" src="https://github.com/rkingsbury/membrane-toolkit/workflows/testing/badge.svg"/></a> <a href="https://codecov.io/gh/rkingsbury/membrane-toolkit"><img alt="codecov" src="https://codecov.io/gh/rkingsbury/membrane-toolkit/branch/master/graph/badge.svg?token=I7RP0QML6S"/></a> <a href="https://opensource.org/licenses/BSD-3-Clause"><img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg"/></a></p>
-<h2 id="what-is-membrane-toolkit">What is membrane-toolkit?<a class="headerlink" href="#what-is-membrane-toolkit" title="Permanent link">¶</a></h2>
-<p>membrane-toolkit is a suite of Python tools for membrane science. There are currently two primary ways to
-use it:</p>
-<h3 id="as-a-calculator">As a Calculator<a class="headerlink" href="#as-a-calculator" title="Permanent link">¶</a></h3>
-<p>membrane-toolkit's <a href="core_functions/core_functions.md">core</a> module packages complex equations from the
-literature into rigorous, validated Python routines that make it fast and easy to perform state-of-the-science
-analysis. Each core function has detailed documentation, including formulas, assumptions, and references, and
-is thoroughly tested for correctness using published data.</p>
-<p>Compared to manual calculations, using core functions to perform calculations saves time, improves quality,
-increases reproducibility, and reduces the chances of error. In addition, every core function is available with
-support for automatic unit conversion, eliminating another potential source of error.</p>
-<p>Core functions can be used for standalone calculations, as part of a data analysis pipline, or as building blocks
-for sophisticated transport models.</p>
-<h3 id="as-an-automatic-data-aggregator">As an automatic Data Aggregator<a class="headerlink" href="#as-an-automatic-data-aggregator" title="Permanent link">¶</a></h3>
-<p>membrane-toolkit's <a href="">pipeline</a> module makes it easy to automatically aggregate and process experimental
-data. It leverages the <a href="https://materialsproject.github.io/maggma/">maggma</a> framework to collect parse data from
-Excel spreadsheets into versatible objects called Stores that can interface with numerous database providers,
-including MongoDB, Pandas dataframes, Amazon storage, and more.</p>
-<p>A typical data aggregation pipeline consists of the following steps:</p>
-<ol>
-<li>Choose or customize a Drone, which defines the file format to use when collecting experimental data.</li>
-<li>Collect data using the template, one file per experiment.</li>
-<li>Run the Drone to aggregate all the data into a Store</li>
-<li>View, summarize, and analyze the data in the Store</li>
-<li>Update as you generate more data. membrane-toolkit's Drones are smart enough to know when files have
-   been updated and to re-parse accordingly.</li>
-</ol>
-<hr/>
-<p>membrane-toolkit is written in <a href="http://docs.python-guide.org/en/latest/">Python</a> and supports Python 3.+.</p>
-<p>Please note that membrane-toolkit is released with a Contributor <a href="https://github.com/rkingsbury/membrane-toolkit/blob/master/CODE_OF_CONDUCT.MD">Code of Conduct</a>. By participating in this project you 
-agree to abide by its terms.</p>
+<a class="md-icon md-content__icon" href="https://github.com/rkingsbury/membrane-toolkit/edit/master/docs/ideas_for_later.md" title="Edit this page"></a>
+<h1>Ideas for later</h1>
+<h2 id="key-classes">Key Classes<a class="headerlink" href="#key-classes" title="Permanent link">¶</a></h2>
+<p>The primary unit of analysis for transport calcs is a differential membrane
+slice comprising 5 objects (probably 3 classes):</p>
+<p>Bulk | Interface | Membrane | Interface | Bulk</p>
+<p>Each of these "phase" classes (bulk, interface, Membrane) will be a base class
+that can be customized e.g. IXMembrane, ROMembrane, AqueousSolution, OrganicSolution,
+etc. Bulk could even be a vapor class</p>
+<p>All of these classes need to have a consistent interface to access 1) composition
+2) state variables like pressure, density, etc., and 3) (electro) chemical potential.</p>
+<p>the customization will specify e.g. how to calculate chemical potential from composition
+AqueousSolution might use D-H or Pitzer models for activity and density, whereas a
+Membrane class might use Manning theory. </p>
+<p>The member methods (e.g. get_activity_coefficient_manning) should be usable by themselves</p>
+<p>How to handle driving forces? I guess you'll specify these at the boundaries (bulk)
+and allow the intermediate phases to be solved?</p>
 </article>
 </div>
 </div>
 </main>
 <footer class="md-footer">
-<div class="md-footer-nav">
-<nav class="md-footer-nav__inner md-grid">
-<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="install/" rel="next" title="Installation">
-<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-<span class="md-flex__ellipsis">
-<span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Installation
-              </span>
-</div>
-<div class="md-flex__cell md-flex__cell--shrink">
-<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-</div>
-</a>
-</nav>
-</div>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-footer-copyright">
@@ -310,15 +234,15 @@ agree to abide by its terms.</p>
 </div>
 </footer>
 </div>
-<script src="./assets/javascripts/application-68832431b5.js"></script>
+<script src="../assets/javascripts/application-68832431b5.js"></script>
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 <script>window.mdc.autoInit()</script>
-<script src="./assets/javascripts/headroom.min.js"></script>
-<script src="./assets/javascripts/jQuery.headroom.min.js"></script>
-<script src="./assets/javascripts/jq-mdc-web.js"></script>
+<script src="../assets/javascripts/headroom.min.js"></script>
+<script src="../assets/javascripts/jQuery.headroom.min.js"></script>
+<script src="../assets/javascripts/jq-mdc-web.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay.min.js"></script>
-<script>app.initialize({version:"1.1",url:{base:"."}})</script>
+<script>app.initialize({version:"1.1",url:{base:".."}})</script>
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-<script src="mathjaxhelper.js"></script>
+<script src="../mathjaxhelper.js"></script>
 </body>
 </html>
