@@ -1,5 +1,4 @@
 numpy
-pymatgen
 monty
 maggma
 pint
