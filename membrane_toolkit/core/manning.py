@@ -2,86 +2,14 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
-import warnings
-
 """
 Manning's counter-ion condensation theory for thermodynamics of ions
 in charged membranes.
-
-manning theory library changelog
-================================
-
-1.0.0 (in progress)
---------------------
-
- - add method to calculate thermodynamic factors for activity coefficients
-   (beta factors)
-
-0.9.0 (2017-06-27)
---------------------
-
- - Fix a bug in get_activity_coefficient_manning causing erroenous results
-   for positively-charged polymers when Manning parameter < 1.
- - Add the ability to calculate diffusion coefficients according to Manning
-   theory
-
-0.8.0 (2017-03-29)
-------------------
-
- - Add a function to compute the Manning parameter based on the fixed charge
-   density of a membrane and its relative permittivity
-
-
-0.7.1 (2016-09-30)
-------------------
-
- - First release as a standalone library, based on code developed for JW-P1
-
-
-:copyright: 2016-7 by Ryan S. Kingsbury
-
-version 1.0.0-dev
 """
-from membrane_toolkit.core.unitized import ureg
+import warnings
 import math
 
-
-def fit_manning_parameter():
-    """
-    Fit the manning parameter based on co-ion sorption data.
-
-    # define an iterative method to solve for the manning parameter, given the co-ion concentraiton
-def solve_manning_param(charge,coion_conc):
-    def solve(xi,charge,coion_conc):
-
-        # define C and D solutions
-        cation = 'Na+'
-        anion = 'Cl-'
-        C_conc = '0.5 mol/L'
-        temp = '22 degC'
-
-        # identify the co-ion
-        if charge < 0:
-            coion = 'Cl-'
-        elif charge >0:
-            coion = 'Na+'
-        else:
-            print('Membrane is uncharged!')
-            return None
-
-        # create C and D solutions
-        C_soln = pyEQL.Solution([[cation,C_conc],[anion,C_conc]],temperature=temp)
-        # equilibrate the bulk solution with the membrane
-        C_soln_mem = manning.manning_eql(C_soln,xi,str(charge)+'mol/L')
-        C_co = C_soln_mem.get_amount(coion,'mol/L').magnitude
-        return (C_co - coion_conc)**2
-
-    from scipy.optimize import minimize
-    result = minimize(solve,1,args=(charge,coion_conc)
-                      ,method='Nelder-Mead',tol=1e-4,options={'maxiter':100,'disp':True})
-    return result.x[0]
-    """
-    pass
+from membrane_toolkit.core.unitized import ureg
 
 
 def manning_eql(solution, xi, fixed_charge):
@@ -89,50 +17,32 @@ def manning_eql(solution, xi, fixed_charge):
     Return a solution object in equilibrium with fixed_charge, according
     to Manning's Counter-ion Condensation theory
 
-    Parameters
-    ----------
-    xi : float
-        Number representing the Manning parameter, dimensionless.
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the membrane
-    Solution : Solution object
-        The external solution to be brought into equilibrium with the fixed
-        charges
+    Args:
+        xi : float
+            Number representing the Manning parameter, dimensionless.
+        fixed_charge : str quantity
+            String representing the concentration of fixed charges, including sign.
+            Must be specified in mol/L of water absorbed by the membrane
+        solution : Solution object
+            The external solution to be brought into equilibrium with the fixed
+            charges
 
-    Returns
-    -------
-    Solution
-        A solution that has established Donnan-Manning equilibrium with the
-        external (input) Solution
+    Returns:
+        Solution : A solution that has established Donnan-Manning equilibrium with the
+            external (input) Solution
 
-    Notes
-    -----
+    Notes:
+        See XXXX
 
-    The equation solved when the Manning Parameter is greater than 1 is:[#]_
+    References:
+        J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul,
+        B. Freeman, et al., Partitioning of Mobile Ions Between Ion Exchange
+        Polymers and Aqueous Salt Solutions: Importance of Counter-ion
+        Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
 
-    TODO insert equations
-
-    References
-    ----------
-    .. [#] J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul,
-       B. Freeman, et al., Partitioning of Mobile Ions Between Ion Exchange
-       Polymers and Aqueous Salt Solutions: Importance of Counter-ion
-       Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
-
-    .. [#] G.S. Manning, Limiting Laws and Counterion Condensation in
-       Polyelectrolyte Solutions I. Colligative Properties, J. Chem.
-       Phys. 51 (1969) 924–933. doi:10.1063/1.1672157.
-
-
-    Examples
-    --------
-    TODO
-
-    See Also
-    --------
-    get_salt()
-
+        G.S. Manning, Limiting Laws and Counterion Condensation in
+        Polyelectrolyte Solutions I. Colligative Properties, J. Chem.
+        Phys. 51 (1969) 924–933. doi:10.1063/1.1672157.
     """
 
     # identify the salt
@@ -249,70 +159,55 @@ def get_activity_coefficient_manning(
     Return an ion activity coefficient inside a charged polymer,
     according to Manning theory
 
-    Parameters
-    ----------
-    xi : float
-        Number representing the Manning parameter for the polymer,
-        dimensionless.
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the polymer. Note that
-        monovalent charged groups are assumed.
-    Cs : str quantity
-        String representing the concentraiton of mobile salt inside the
-        polymer. Must be specified in mol/L of water absorbed by the polymer.
-    type : str, optional :
-        Specifies whether the counter-ion, co-ion, or the mean ionic activity
-        coefficient is returned. Valid arguments are 'counter', 'co', and
-        'mean'. Defaults to 'mean' if not specified.
-    nu_counter, nu_co : int, optional
-        Stoichiometric coefficients of the counter-ion and co-ion in the parent
-        salt. Defautls to 1 if not specified.
-    z_counter, z_co : int, optional
-        Net charge, including sign, of the counter-ion and co-ion in the parent
-        salt. Defaults to +1 and -1 if not specified. Note that the sign of
-        z_counter must be opposite to the sign of fixed_charge, while the sign
-        of z_co must match that of fixed_Charge.
+    Args:
+        xi : float
+            Number representing the Manning parameter for the polymer,
+            dimensionless.
+        fixed_charge : str quantity
+            String representing the concentration of fixed charges, including sign.
+            Must be specified in mol/L of water absorbed by the polymer. Note that
+            monovalent charged groups are assumed.
+        Cs : str quantity
+            String representing the concentraiton of mobile salt inside the
+            polymer. Must be specified in mol/L of water absorbed by the polymer.
+        type : str, optional :
+            Specifies whether the counter-ion, co-ion, or the mean ionic activity
+            coefficient is returned. Valid arguments are 'counter', 'co', and
+            'mean'. Defaults to 'mean' if not specified.
+        nu_counter, nu_co : int, optional
+            Stoichiometric coefficients of the counter-ion and co-ion in the parent
+            salt. Defautls to 1 if not specified.
+        z_counter, z_co : int, optional
+            Net charge, including sign, of the counter-ion and co-ion in the parent
+            salt. Defaults to +1 and -1 if not specified. Note that the sign of
+            z_counter must be opposite to the sign of fixed_charge, while the sign
+            of z_co must match that of fixed_Charge.
 
-    Returns
-    -------
-    Float
-        The mean or individual ion activity coefficient inside the polymer.
+    Returns:
+        float: the mean or individual ion activity coefficient inside the polymer.
 
-    Notes
-    -----
+    Notes:
+        Ion activity coefficients when the Manning Parameter is greater than the
+        critical value are given by:
 
-    Ion activity coefficients when the Manning Parameter is greater than the
-    critical value are given by [#]_
+        TODO update
+        $$
+        \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
+        $$
 
-    TODO update
-    $$
-    \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
-    $$
+        and when the Manning Parameter is less than the critical value, by [#]_
 
-    and when the Manning Parameter is less than the critical value, by [#]_
+        TODO update
 
-    TODO update
+    References:
+        J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul,
+        B. Freeman, et al., Partitioning of Mobile Ions Between Ion Exchange
+        Polymers and Aqueous Salt Solutions: Importance of Counter-ion
+        Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
 
-    References
-    ----------
-    .. [#] J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul,
-       B. Freeman, et al., Partitioning of Mobile Ions Between Ion Exchange
-       Polymers and Aqueous Salt Solutions: Importance of Counter-ion
-       Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
-
-    .. [#] Manning, G. S. Limiting Laws and Counterion Condensation in
-       Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
-       1969, 51 (3), 924–933.
-
-    Examples
-    --------
-    TODO
-
-    See Also
-    --------
-    TODO
-
+        Manning, G. S. Limiting Laws and Counterion Condensation in
+        Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
+        1969, 51 (3), 924–933.
     """
     # check to make sure the signs of the input arguments are correct
     if ureg(fixed_charge).magnitude < 0:
@@ -387,70 +282,63 @@ def diffusion_coefficient_manning(
     Return a diffusion coefficient inside a charged polymer,
     according to Manning theory
 
-    Parameters
-    ----------
-    xi : float
-        Number representing the Manning parameter for the polymer,
-        dimensionless.
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the polymer. Note that
-        monovalent charged groups are assumed.
-    Cs : str quantity
-        String representing the concentraiton of mobile salt inside the polymer.
-        Must be specified in mol/L of water absorbed by the polymer.
-    vol_frac : float
-        The volume fraction of water sorbed by the ion exchange membrane.
-    type : str, optional :
-        Specifies whether the counter-ion, co-ion, or the mean ionic activity
-        coefficient is returned. Valid arguments are 'counter', 'co'.
-        Defaults to 'counter' if not specified.
-    nu_counter, nu_co : int, optional
-        Stoichiometric coefficients of the counter-ion and co-ion in the parent
-        salt. Defautls to 1 if not specified.
-    z_counter, z_co : int, optional
-        Net charge, including sign, of the counter-ion and co-ion in the parent
-        salt. Defaults to +1 and -1 if not specified. Note that the sign of
-        z_counter must be opposite to the sign of fixed_charge, while the sign
-        of z_co must match that of fixed_Charge.
+    Args:
+        xi : float
+            Number representing the Manning parameter for the polymer,
+            dimensionless.
+        fixed_charge : str quantity
+            String representing the concentration of fixed charges, including sign.
+            Must be specified in mol/L of water absorbed by the polymer. Note that
+            monovalent charged groups are assumed.
+        Cs : str quantity
+            String representing the concentraiton of mobile salt inside the polymer.
+            Must be specified in mol/L of water absorbed by the polymer.
+        vol_frac : float
+            The volume fraction of water sorbed by the ion exchange membrane.
+        type : str, optional :
+            Specifies whether the counter-ion, co-ion, or the mean ionic activity
+            coefficient is returned. Valid arguments are 'counter', 'co'.
+            Defaults to 'counter' if not specified.
+        nu_counter, nu_co : int, optional
+            Stoichiometric coefficients of the counter-ion and co-ion in the parent
+            salt. Defautls to 1 if not specified.
+        z_counter, z_co : int, optional
+            Net charge, including sign, of the counter-ion and co-ion in the parent
+            salt. Defaults to +1 and -1 if not specified. Note that the sign of
+            z_counter must be opposite to the sign of fixed_charge, while the sign
+            of z_co must match that of fixed_Charge.
 
-    Returns
-    -------
-    Float
-        The mean or individual ion diffusion coefficient inside the polymer, normalized
-        by the ion diffusion coefficient in bulk solution (D_mem / D_bulk).
+    Returns:
+        float: The mean or individual ion diffusion coefficient inside the polymer, normalized
+            by the ion diffusion coefficient in bulk solution (D_mem / D_bulk).
 
-    Notes
-    -----
+    Notes:
+        Ion diffusion coefficients when the Manning Parameter is greater than the critical
+        value are given by:
 
-    Ion diffusion coefficients when the Manning Parameter is greater than the critical
-    value are given by [#]_
+        TODO update
+        $$
+            \\frac{D_g}{D_g^s}
+        $$
 
-    TODO update
-    $$
-        \\frac{D_g}{D_g^s}
-    $$
+        Where $A$ is equal to
 
-    Where $A$ is equal to
+        $$
+            \\sum_{m1} \\sum_{m2} [ \\pi |z_g|(m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g \\nu_c)|z_g z_c||z_g| \\xi}{X}]^-2
+        $$
 
-    $$
-        \\sum_{m1} \\sum_{m2} [ \\pi |z_g|(m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g \\nu_c)|z_g z_c||z_g| \\xi}{X}]^-2
-    $$
+    References:
+        J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul, B. Freeman, et al.,
+        Partitioning of Mobile Ions Between Ion Exchange Polymers and Aqueous Salt Solutions:
+        Importance of Counter-ion Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
 
-    References
-    ----------
-    .. [#] J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul, B. Freeman, et al.,
-    Partitioning of Mobile Ions Between Ion Exchange Polymers and Aqueous Salt Solutions:
-    Importance of Counter-ion Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.
+        Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions I.
+        Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.
 
-    .. [#] Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions I.
-    Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.
-
-    Examples
-    --------
-    # an example based on Figure 7 of the Kamcev Reference
-    >>> manning.diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')
-    0.10082061291437808
+    Examples:
+        An example based on Figure 7 of the Kamcev Reference
+        ```manning.diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')```
+        0.10082061291437808
 
     """
     # check to make sure the signs of the input arguments are correct
@@ -514,54 +402,48 @@ def _A(x, y, nu_counter=1, nu_co=1, z_counter=1, z_co=-1):
     Calculate the function 'A' required for determining diffusion coefficients
     according to Manning's counter-ion condensation theory
 
-    Parameters
-    ----------
-    xi : float
-        Number representing the Manning parameter for the polymer, dimensionless.
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the polymer. Note that
-        monovalent charged groups are assumed.
-    nu_counter, nu_co : int, optional
-        Stoichiometric coefficients of the counter-ion and co-ion in the parent
-        salt. Defautls to 1 if not specified.
-    z_counter, z_co : int, optional
-        Net charge, including sign, of the counter-ion and co-ion in the parent
-        salt. Defaults to +1 and -1 if not specified. Note that the sign of
-        z_counter must be opposite to the sign of fixed_charge, while the sign
-        of z_co must match that of fixed_Charge.
+    Args:
+        xi : float
+            Number representing the Manning parameter for the polymer, dimensionless.
+        fixed_charge : str quantity
+            String representing the concentration of fixed charges, including sign.
+            Must be specified in mol/L of water absorbed by the polymer. Note that
+            monovalent charged groups are assumed.
+        nu_counter, nu_co : int, optional
+            Stoichiometric coefficients of the counter-ion and co-ion in the parent
+            salt. Defautls to 1 if not specified.
+        z_counter, z_co : int, optional
+            Net charge, including sign, of the counter-ion and co-ion in the parent
+            salt. Defaults to +1 and -1 if not specified. Note that the sign of
+            z_counter must be opposite to the sign of fixed_charge, while the sign
+            of z_co must match that of fixed_Charge.
 
-    Returns
-    -------
-    Float
-        The mean or individual ion diffusion coefficient inside the polymer.
+    Returns:
+        float: The mean or individual ion diffusion coefficient inside the polymer.
 
-    Notes
-    -----
+    Notes:
+        The function A(x,y) is given by [#]_ [#]_ [#]_
 
-    The function A(x,y) is given by [#]_ [#]_ [#]_
+        $$
+            \\sum_{m1} \\sum_{m2} [ \\frac{\\pi}{x} (m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g + \\nu_c)|z_g z_c|}{y}]^-2
+        $$
 
-    $$
-        \\sum_{m1} \\sum_{m2} [ \\frac{\\pi}{x} (m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g + \\nu_c)|z_g z_c|}{y}]^-2
-    $$
+        When $\\xi$ is greater than the critical value, $x=\\frac{1}{|z_g|}$ and $y=\\frac{X}{\\xi |z_g|}$.
+        If $\\xi$ is lower than the critical value (counter-ion condensation does not occur), then
+        $x=\\xi$ and $y=X$.
 
-    When $\\xi$ is greater than the critical value, $x=\\frac{1}{|z_g|}$ and $y=\\frac{X}{\\xi |z_g|}$.
-    If $\\xi$ is lower than the critical value (counter-ion condensation does not occur), then
-    $x=\\xi$ and $y=X$.
+    References:
+        Kamcev, J.; Paul, D. R.; Manning, G. S.; Freeman, B. D. Predicting Salt
+        Permeability Coefficients in Highly Swollen, Highly Charged Ion Exchange Membranes.
+        ACS Appl. Mater. Interfaces 2017, acsami.6b14902.
 
-    References
-    ----------
-    .. [#] Kamcev, J.; Paul, D. R.; Manning, G. S.; Freeman, B. D. Predicting Salt
-    Permeability Coefficients in Highly Swollen, Highly Charged Ion Exchange Membranes.
-    ACS Appl. Mater. Interfaces 2017, acsami.6b14902.
+        Y. Ji, H. Luo, G.M. Geise, Specific co-ion sorption and diffusion properties
+        influence membrane permselectivity, J. Membr. Sci. 563 (2018) 492–504.
+        doi:10.1016/j.memsci.2018.06.010.
 
-    .. [#] Y. Ji, H. Luo, G.M. Geise, Specific co-ion sorption and diffusion properties
-    influence membrane permselectivity, J. Membr. Sci. 563 (2018) 492–504.
-    doi:10.1016/j.memsci.2018.06.010.
-
-    .. [#] Fan, H.; Yip, N. Y. Elucidating Conductivity-Permselectivity Tradeoffs
-    in Electrodialysis and Reverse Electrodialysis by Structure-Property Analysis
-    of Ion-Exchange Membranes. J. Membr. Sci. 2018.
+        Fan, H.; Yip, N. Y. Elucidating Conductivity-Permselectivity Tradeoffs
+        in Electrodialysis and Reverse Electrodialysis by Structure-Property Analysis
+        of Ion-Exchange Membranes. J. Membr. Sci. 2018.
 
     """
     # approximate infinity as this number
@@ -605,51 +487,46 @@ def beta(
     Return an ion activity coefficient inside a charged polymer,
     according to Manning theory
 
-    Parameters
-    ----------
-    xi : float
-        Number representing the Manning parameter for the polymer, dimensionless.
-    fixed_charge : str quantity
-        String representing the concentration of fixed charges, including sign.
-        Must be specified in mol/L of water absorbed by the polymer. Note that
-        monovalent charged groups are assumed.
-    C_counter : str quantity
-        String representing the counter-ion concentration inside the polymer.
-        Must be specified in mol/L of water absorbed by the polymer.
-    Cs : str quantity
-        String representing the concentraiton of mobile salt inside the polymer.
-        Must be specified in mol/L of water absorbed by the polymer.
-    type : str, optional :
-        Specifies whether the counter-ion, co-ion, or the mean ionic activity
-        coefficient is returned. Valid arguments are 'counter' or 'co'.
-    nu_counter, nu_co : int, optional
-        Stoichiometric coefficients of the counter-ion and co-ion in the parent
-        salt. Defautls to 1 if not specified.
-    z_counter, z_co : int, optional
-        Net charge, including sign, of the counter-ion and co-ion in the parent
-        salt. Defaults to +1 and -1 if not specified. Note that the sign of
-        z_counter must be opposite to the sign of fixed_charge, while the sign
-        of z_co must match that of fixed_Charge.
+    Args:
+        xi : float
+            Number representing the Manning parameter for the polymer, dimensionless.
+        fixed_charge : str quantity
+            String representing the concentration of fixed charges, including sign.
+            Must be specified in mol/L of water absorbed by the polymer. Note that
+            monovalent charged groups are assumed.
+        C_counter : str quantity
+            String representing the counter-ion concentration inside the polymer.
+            Must be specified in mol/L of water absorbed by the polymer.
+        Cs : str quantity
+            String representing the concentraiton of mobile salt inside the polymer.
+            Must be specified in mol/L of water absorbed by the polymer.
+        type : str, optional :
+            Specifies whether the counter-ion, co-ion, or the mean ionic activity
+            coefficient is returned. Valid arguments are 'counter' or 'co'.
+        nu_counter, nu_co : int, optional
+            Stoichiometric coefficients of the counter-ion and co-ion in the parent
+            salt. Defautls to 1 if not specified.
+        z_counter, z_co : int, optional
+            Net charge, including sign, of the counter-ion and co-ion in the parent
+            salt. Defaults to +1 and -1 if not specified. Note that the sign of
+            z_counter must be opposite to the sign of fixed_charge, while the sign
+            of z_co must match that of fixed_Charge.
 
-    Returns
-    -------
-    Float
-        The thermodynamic factor.
+    Returns:
+        float: The thermodynamic factor.
 
-    Notes
-    -----
+    Notes:
+        When the Manning parameter is greater than the critical value, the
+        thermodynamic factors are given by
 
-    When the Manning parameter is greater than the critical value, the
-    thermodynamic factors are given by [#]_
+        TODO update
+        $$
+            \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
+        $$
 
-    TODO update
-    $$
-        \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]
-    $$
+        and when the Manning Parameter is less than the critical value, by [#]_
 
-    and when the Manning Parameter is less than the critical value, by [#]_
-
-    TODO update
+        TODO update
     """
 
     # check to make sure the signs of the input arguments are correct

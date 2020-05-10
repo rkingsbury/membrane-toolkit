@@ -7,10 +7,17 @@ theme:
 
 nav:
   - Home: index.md
-  - Core Functions: core_functions/core_functions.md
+  - Installation: install.md
+  - Core Functions: 
+      - Diffusion: core_functions/diffusion.md
+      - Donnan Exclusion: core_functions/donnan.md
+      - Manning Theory: core_functions/manning.md
+      - Electrochemical: core_functions/potential.md
+  - Data Pipeline: pipeline/pipeline.md
+  - For Developers: develop.md
 
 repo_url: https://github.com/rkingsbury/membrane-toolkit
-site_url: https://membrane-toolkit.readthedocs.io
+site_url: https://rkingsbury.github.io/membrane-toolkit/
 docs_dir: ./membrane_toolkit/docs
 site_dir: ./docs
 copyright: 2020 Ryan Kingsbury

@@ -1,10 +1,3 @@
-Code Organization
------------------
-Core - fully documented, thoroughly tested, standalone functions for key calculations,
-    implemented with floating point math and available in unitized versions with Quantity support
-
-
-
 Key Classes
 -----------
 
@@ -28,4 +21,3 @@ The member methods (e.g. get_activity_coefficient_manning) should be usable by t
 
 How to handle driving forces? I guess you'll specify these at the boundaries (bulk)
 and allow the intermediate phases to be solved?
-
