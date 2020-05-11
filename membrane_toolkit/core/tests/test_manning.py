@@ -28,14 +28,14 @@ def test_activity_against_lit_monovalent():
     """
     # CR61 cation exchange membrane
     xi = 1.83  # Manning parameter
-    Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
+    Cfix = -3.21  # fixed charge conc. in mol/L water sorbed
     # 0.01 M external NaCl concentration
-    Cs = "3e-4 mol/L"
+    Cs = 3e-4  # mol/L water sorbed
     assert allclose(
         get_activity_coefficient_manning(xi, Cfix, Cs), 0.2 ** 0.5, atol=0.01
     )
     # 1 M external NaCl concentration
-    Cs = "0.4 mol/L"
+    Cs = 0.4  # mol/L water sorbed
     assert allclose(
         get_activity_coefficient_manning(xi, Cfix, Cs), 0.29 ** 0.5, atol=0.01
     )
@@ -52,9 +52,9 @@ def test_activity_against_lit_multivalent():
     """
     # CR61 cation exchange membrane
     xi = 1.83  # Manning parameter
-    Cfix = "-3.21 mol/L"  # fixed charge conc. in mol/L water sorbed
+    Cfix = -3.21  # fixed charge conc. in mol/L water sorbed
     # 0.1 M external NaCl concentration
-    Cs = "0.035 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+    Cs = 0.035  # Mobile salt concentration is Cl- conc. / 2
     assert allclose(
         get_activity_coefficient_manning(
             xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
@@ -63,7 +63,7 @@ def test_activity_against_lit_multivalent():
         atol=0.01,
     )
     # 4 M external NaCl concentration
-    Cs = "3.5 mol/L"  # Mobile salt concentration is Cl- conc. / 2
+    Cs = 3.5  # Mobile salt concentration is Cl- conc. / 2
     assert allclose(
         get_activity_coefficient_manning(
             xi, Cfix, Cs, z_counter=2, z_co=-1, nu_counter=1, nu_co=2
@@ -84,9 +84,9 @@ def test_activity_against_lit_monovalent_uncondensed():
     """
     # CA267 cation exchange membrane
     xi = 1.00  # Manning parameter
-    Cfix = "-2.66 mol/L"  # fixed charge conc. in mol/L water sorbed
+    Cfix = -2.66  # fixed charge conc. in mol/L water sorbed
     # 0.03 M external NaCl concentration
-    Cs = "0.0007 mol/L"
+    Cs = 0.0007  # mol/L water sorbed
     # bulk solution activity coefficient is 0.85 at this concentration
     # so gamma_membrane^2 = C_bulk ^2 0.85 ^2 / C_+ C_-
     # C- = Cs and C+ = Cs + Cfix
@@ -103,9 +103,9 @@ def test_activity_continuity_monovalent():
 
     """
     # CA267 cation exchange membrane
-    Cfix = "-2.66 mol/L"  # fixed charge conc. in mol/L water sorbed
+    Cfix = -2.66  # fixed charge conc. in mol/L water sorbed
     # 0.03 M external NaCl concentration
-    Cs = "0.0007 mol/L"
+    Cs = 0.0007  # mol/L water sorbed
     # the critical value of xi is 1 for a monovalent counter-ion
     assert allclose(
         get_activity_coefficient_manning(1.01, Cfix, Cs),
@@ -116,23 +116,23 @@ def test_activity_continuity_monovalent():
 
 def test_bad_input_type():
     with pytest.raises(Exception, match="Invalid"):
-        get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", type="blah")
+        get_activity_coefficient_manning(2, -3, 3e-4, type="blah")
 
 
 def test_sign_mismatch_1():
     with pytest.raises(Exception, match="Mismatch"):
-        get_activity_coefficient_manning(2, "3 mol/L", "3e-4 mol/L")
+        get_activity_coefficient_manning(2, 3, 3e-4)
 
 
 def test_sign_mismatch_2():
     with pytest.raises(Exception, match="Mismatch"):
-        get_activity_coefficient_manning(2, "-3 mol/L", "3e-4 mol/L", z_counter=-1)
+        get_activity_coefficient_manning(2, -3, 3e-4, z_counter=-1)
 
 
 def test_off_stoichiometry():
     with pytest.raises(Exception, match="stoichiometry"):
         get_activity_coefficient_manning(
-            2, "-3 mol/L", "3e-4 mol/L", z_counter=1, z_co=-2, nu_counter=1, nu_co=2
+            2, -3, 3e-4, z_counter=1, z_co=-2, nu_counter=1, nu_co=2
         )
 
 
@@ -175,55 +175,55 @@ def test_symmetry():
     vol_frac = 0.3
 
     # CEM case
-    Cfix = str(-1 * CD) + "mol/L"
+    Cfix = -1 * CD
     z_counter = 1
     z_co = -1
     nu_counter = 1
     nu_co = 1
 
-    s_mem = manning_eql(bulk_solution, xi, Cfix)
+    s_mem = manning_eql(bulk_solution, xi, str(Cfix) + "mol/L")
 
-    Cc_ct = s_mem.get_amount("Na+", "mol/L")
-    Cc_co = s_mem.get_amount("Cl-", "mol/L")
+    Cc_ct = s_mem.get_amount("Na+", "mol/L").magnitude
+    Cc_co = s_mem.get_amount("Cl-", "mol/L").magnitude
 
     Dc_ct = diffusion_coefficient_manning(
-        xi, Cfix, str(Cc_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Cc_co, vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Dc_co = diffusion_coefficient_manning(
-        xi, Cfix, str(Cc_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Cc_co, vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     Ac_ct = get_activity_coefficient_manning(
-        xi, Cfix, str(Cc_co), "counter", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Cc_co, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Ac_co = get_activity_coefficient_manning(
-        xi, Cfix, str(Cc_co), "co", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Cc_co, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     # AEM case
-    Cfix = str(CD) + "mol/L"
+    Cfix = CD
     z_counter = -1
     z_co = 1
     nu_counter = 1
     nu_co = 1
 
-    s_mem = manning_eql(bulk_solution, xi, Cfix)
+    s_mem = manning_eql(bulk_solution, xi, str(Cfix) + "mol/L")
 
-    Ca_ct = s_mem.get_amount("Cl-", "mol/L")
-    Ca_co = s_mem.get_amount("Na+", "mol/L")
+    Ca_ct = s_mem.get_amount("Cl-", "mol/L").magnitude
+    Ca_co = s_mem.get_amount("Na+", "mol/L").magnitude
 
     Da_ct = diffusion_coefficient_manning(
-        xi, Cfix, str(Ca_co), vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Ca_co, vol_frac, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Da_co = diffusion_coefficient_manning(
-        xi, Cfix, str(Ca_co), vol_frac, "co", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Ca_co, vol_frac, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     Aa_ct = get_activity_coefficient_manning(
-        xi, Cfix, str(Ca_co), "counter", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Ca_co, "counter", nu_counter, nu_co, z_counter, z_co
     )
     Aa_co = get_activity_coefficient_manning(
-        xi, Cfix, str(Ca_co), "co", nu_counter, nu_co, z_counter, z_co
+        xi, Cfix, Ca_co, "co", nu_counter, nu_co, z_counter, z_co
     )
 
     assert Cc_ct == Ca_ct
