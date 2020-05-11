@@ -254,20 +254,18 @@ according to Manning theory</p>
 <tbody>
 <tr>
 <td><code>xi</code></td>
-<td><code></code></td>
+<td><code>float</code></td>
 <td>
-<p>float
-Number representing the Manning parameter for the polymer,
+<p>Number representing the Manning parameter for the polymer,
 dimensionless.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 <tr>
-<td><code>fixed_charge</code></td>
-<td><code></code></td>
+<td><code>C_fix</code></td>
+<td><code>float</code></td>
 <td>
-<p>str quantity
-String representing the concentration of fixed charges, including sign.
+<p>Number representing the concentration of fixed charges, including sign.
 Must be specified in mol/L of water absorbed by the polymer. Note that
 monovalent charged groups are assumed.</p>
 </td>
@@ -275,20 +273,18 @@ monovalent charged groups are assumed.</p>
 </tr>
 <tr>
 <td><code>Cs</code></td>
-<td><code></code></td>
+<td><code>float</code></td>
 <td>
-<p>str quantity
-String representing the concentraiton of mobile salt inside the
+<p>Number representing the concentraiton of mobile salt inside the
 polymer. Must be specified in mol/L of water absorbed by the polymer.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code></code></td>
+<td><code>str</code></td>
 <td>
-<p>str, optional :
-Specifies whether the counter-ion, co-ion, or the mean ionic activity
+<p>Specifies whether the counter-ion, co-ion, or the mean ionic activity
 coefficient is returned. Valid arguments are 'counter', 'co', and
 'mean'. Defaults to 'mean' if not specified.</p>
 </td>
@@ -296,25 +292,38 @@ coefficient is returned. Valid arguments are 'counter', 'co', and
 </tr>
 <tr>
 <td><code>nu_counter</code></td>
-<td><code></code></td>
+<td><code>int</code></td>
 <td>
-<p>int, nu_co: int, optional
-Stoichiometric coefficients of the counter-ion and co-ion in the parent
-salt. Defautls to 1 if not specified.</p>
+<p>Stoichiometric coefficient of the counter-ion in the parent salt. Defaults to 1 if not specified.</p>
+</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>nu_co</code></td>
+<td><code>int</code></td>
+<td>
+<p>int
+Stoichiometric coefficient of the co-ion in the parent salt. Defaults to -1 if not specified.</p>
 </td>
 <td><code>1</code></td>
 </tr>
 <tr>
 <td><code>z_counter</code></td>
-<td><code></code></td>
+<td><code>int</code></td>
 <td>
-<p>int , z_co: int, optional
-Net charge, including sign, of the counter-ion and co-ion in the parent
-salt. Defaults to +1 and -1 if not specified. Note that the sign of
-z_counter must be opposite to the sign of fixed_charge, while the sign
-of z_co must match that of fixed_Charge.</p>
+<p>Net charge, including sign, of the counter-ion. Defaults to +1 if not specified. Note that the sign of
+z_counter must be opposite to the sign of C_fix.</p>
 </td>
 <td><code>1</code></td>
+</tr>
+<tr>
+<td><code>z_co</code></td>
+<td><code>int</code></td>
+<td>
+<p>Net charge, including sign, of the co-ion. Defaults to -1 if not specified. Note that the sign of
+z_co must be the same as the sign of C_fix.</p>
+</td>
+<td><code>-1</code></td>
 </tr>
 </tbody>
 </table>
@@ -337,15 +346,51 @@ of z_co must match that of fixed_Charge.</p>
 </table>
 <div class="admonition notes">
 <p class="admonition-title">Notes</p>
-<p>Ion activity coefficients when the Manning Parameter is greater than the
-critical value are given by:</p>
-<p>TODO update
+<p>When <script type="math/tex"> \xi \gt \frac{1}{|z_{ct}|} </script>, ion activity coefficients are given by:</p>
+<p>
 <script type="math/tex; mode=display">
-\gamma_+ \gamma_- = [{{X \over \xi} + 1 \over X +1] exp [{-X \ over X + 2 \xi}]
+    \bar \gamma_{ct} = \frac{\frac{X}{\xi |z_{ct}|} + \nu_{ct} |z_{ct}|}{X + \nu_{ct} |z_{ct}|}
+    exp [-\frac{\frac{X}{2}}{X+\xi |z_{co} z_{ct}| ( \nu_{co} + \nu_{ct})}]
 </script>
 </p>
-<p>and when the Manning Parameter is less than the critical value, by [#]_</p>
-<p>TODO update</p>
+<p>and</p>
+<p>
+<script type="math/tex; mode=display">
+    \bar \gamma_{co} = exp [-\frac{\frac{X z_{co}^2}{2 z_{ct}^2}}{X+\xi |z_{co} z_{ct}|
+    ( \nu_{co} + \nu_{ct})}]
+</script>
+</p>
+<p>and if <script type="math/tex"> \xi \lt \frac{1}{|z_{ct}|} </script>, by</p>
+<p>
+<script type="math/tex; mode=display">
+    \bar \gamma_{ct} = exp [-\frac{\xi \frac{X}{2}}{(X |z_{ct}| +
+    (\nu_{co} z_{co}^2 + \nu_{ct} z_{ct}^2)} z_{ct}^2]
+</script>
+</p>
+<p>and</p>
+<p>
+<script type="math/tex; mode=display">
+\bar \gamma_{co} = exp [-\frac{\xi \frac{X}{2}}{(X |z_{ct}| + (\nu_{co} z_{co}^2 +
+\bar \nu_{ct} z_{ct}^2)} z_{co}^2]
+</script>
+</p>
+<p>where</p>
+<p>
+<script type="math/tex; mode=display">
+X = \frac{\bar C_{co}}{\bar C_{fix}}
+</script>
+</p>
+<p>
+<script type="math/tex">\bar \gamma</script> are activity coefficients, <script type="math/tex"> \bar C_{fix} </script> is the fixed charge concentration
+(including sign), <script type="math/tex"> \xi </script> is the Manning parameter, <script type="math/tex"> \bar C_{co} </script> is the co-ion concentration
+in the membrane, and subscripts <script type="math/tex">co</script> and <script type="math/tex">ct</script> refer to the co-ion and counter-ion, respectively,
+and overbars indicate membrane-phase quantities.</p>
+<p>The mean activity coefficient is given by</p>
+<p>
+<script type="math/tex; mode=display">
+\bar \gamma_\pm = (\gamma_{ct}^{\nu_{ct}} \gamma_{co}^{\nu_{co}})^{\frac{1}{\nu_{ct} + \nu_{co}}}
+</script>
+</p>
 </div>
 <div class="admonition references">
 <p class="admonition-title">References</p>
@@ -353,6 +398,9 @@ critical value are given by:</p>
 B. Freeman, et al., Partitioning of Mobile Ions Between Ion Exchange
 Polymers and Aqueous Salt Solutions: Importance of Counter-ion
 Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.</p>
+<p>Kamcev, J.; Paul, D. R.; Freeman, B. D. Ion Activity Coefficients in
+Ion Exchange Polymers: Applicability of Manning’s Counterion Condensation
+Theory. Macromolecules 2015, 48 (21), 8011–8024.</p>
 <p>Manning, G. S. Limiting Laws and Counterion Condensation in
 Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
 1969, 51 (3), 924–933.</p>
@@ -363,7 +411,14 @@ Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>156
+<pre><span></span>149
+150
+151
+152
+153
+154
+155
+156
 157
 158
 159
@@ -475,57 +530,138 @@ Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
 265
 266
 267
-268</pre>
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">get_activity_coefficient_manning</span><span class="p">(</span>
-    <span class="n">xi</span><span class="p">,</span> <span class="n">fixed_charge</span><span class="p">,</span> <span class="n">Cs</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">,</span> <span class="n">nu_counter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nu_co</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_counter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_co</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="n">xi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">C_fix</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">Cs</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"mean"</span><span class="p">,</span>
+    <span class="n">nu_counter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">nu_co</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">z_counter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">z_co</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Return an ion activity coefficient inside a charged polymer,</span>
 <span class="sd">    according to Manning theory</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        xi : float</span>
+<span class="sd">        xi:</span>
 <span class="sd">            Number representing the Manning parameter for the polymer,</span>
 <span class="sd">            dimensionless.</span>
-<span class="sd">        fixed_charge: str quantity</span>
-<span class="sd">            String representing the concentration of fixed charges, including sign.</span>
+<span class="sd">        C_fix:</span>
+<span class="sd">            Number representing the concentration of fixed charges, including sign.</span>
 <span class="sd">            Must be specified in mol/L of water absorbed by the polymer. Note that</span>
 <span class="sd">            monovalent charged groups are assumed.</span>
-<span class="sd">        Cs: str quantity</span>
-<span class="sd">            String representing the concentraiton of mobile salt inside the</span>
+<span class="sd">        Cs:</span>
+<span class="sd">            Number representing the concentraiton of mobile salt inside the</span>
 <span class="sd">            polymer. Must be specified in mol/L of water absorbed by the polymer.</span>
-<span class="sd">        type: str, optional :</span>
+<span class="sd">        type:</span>
 <span class="sd">            Specifies whether the counter-ion, co-ion, or the mean ionic activity</span>
 <span class="sd">            coefficient is returned. Valid arguments are 'counter', 'co', and</span>
 <span class="sd">            'mean'. Defaults to 'mean' if not specified.</span>
-<span class="sd">        nu_counter: int, nu_co: int, optional</span>
-<span class="sd">            Stoichiometric coefficients of the counter-ion and co-ion in the parent</span>
-<span class="sd">            salt. Defautls to 1 if not specified.</span>
-<span class="sd">        z_counter: int , z_co: int, optional</span>
-<span class="sd">            Net charge, including sign, of the counter-ion and co-ion in the parent</span>
-<span class="sd">            salt. Defaults to +1 and -1 if not specified. Note that the sign of</span>
-<span class="sd">            z_counter must be opposite to the sign of fixed_charge, while the sign</span>
-<span class="sd">            of z_co must match that of fixed_Charge.</span>
+<span class="sd">        nu_counter:</span>
+<span class="sd">            Stoichiometric coefficient of the counter-ion in the parent salt. Defaults to 1 if not specified.</span>
+<span class="sd">        nu_co : int</span>
+<span class="sd">            Stoichiometric coefficient of the co-ion in the parent salt. Defaults to -1 if not specified.</span>
+<span class="sd">        z_counter:</span>
+<span class="sd">            Net charge, including sign, of the counter-ion. Defaults to +1 if not specified. Note that the sign of</span>
+<span class="sd">            z_counter must be opposite to the sign of C_fix.</span>
+<span class="sd">        z_co:</span>
+<span class="sd">            Net charge, including sign, of the co-ion. Defaults to -1 if not specified. Note that the sign of</span>
+<span class="sd">            z_co must be the same as the sign of C_fix.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        float: the mean or individual ion activity coefficient inside the polymer.</span>
 
 <span class="sd">    Notes:</span>
-<span class="sd">        Ion activity coefficients when the Manning Parameter is greater than the</span>
-<span class="sd">        critical value are given by:</span>
+<span class="sd">        When \( \\xi \\gt \\frac{1}{|z_{ct}|} \), ion activity coefficients are given by:</span>
 
-<span class="sd">        TODO update</span>
 <span class="sd">        $$</span>
-<span class="sd">        \\gamma_+ \\gamma_- = [{{X \\over \\xi} + 1 \\over X +1] exp [{-X \\ over X + 2 \\xi}]</span>
+<span class="sd">            \\bar \\gamma_{ct} = \\frac{\\frac{X}{\\xi |z_{ct}|} + \\nu_{ct} |z_{ct}|}{X + \\nu_{ct} |z_{ct}|}</span>
+<span class="sd">            exp [-\\frac{\\frac{X}{2}}{X+\\xi |z_{co} z_{ct}| ( \\nu_{co} + \\nu_{ct})}]</span>
 <span class="sd">        $$</span>
 
-<span class="sd">        and when the Manning Parameter is less than the critical value, by [#]_</span>
+<span class="sd">        and</span>
 
-<span class="sd">        TODO update</span>
+<span class="sd">        $$</span>
+<span class="sd">            \\bar \\gamma_{co} = exp [-\\frac{\\frac{X z_{co}^2}{2 z_{ct}^2}}{X+\\xi |z_{co} z_{ct}|</span>
+<span class="sd">            ( \\nu_{co} + \\nu_{ct})}]</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        and if \( \\xi \\lt \\frac{1}{|z_{ct}|} \), by</span>
+
+<span class="sd">        $$</span>
+<span class="sd">            \\bar \\gamma_{ct} = exp [-\\frac{\\xi \\frac{X}{2}}{(X |z_{ct}| +</span>
+<span class="sd">            (\\nu_{co} z_{co}^2 + \\nu_{ct} z_{ct}^2)} z_{ct}^2]</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        and</span>
+
+<span class="sd">        $$</span>
+<span class="sd">        \\bar \\gamma_{co} = exp [-\\frac{\\xi \\frac{X}{2}}{(X |z_{ct}| + (\\nu_{co} z_{co}^2 +</span>
+<span class="sd">        \\bar \\nu_{ct} z_{ct}^2)} z_{co}^2]</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        where</span>
+
+<span class="sd">        $$</span>
+<span class="sd">        X = \\frac{\\bar C_{co}}{\\bar C_{fix}}</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        \(\\bar \\gamma\) are activity coefficients, \( \\bar C_{fix} \) is the fixed charge concentration</span>
+<span class="sd">        (including sign), \( \\xi \) is the Manning parameter, \( \\bar C_{co} \) is the co-ion concentration</span>
+<span class="sd">        in the membrane, and subscripts \(co\) and \(ct\) refer to the co-ion and counter-ion, respectively,</span>
+<span class="sd">        and overbars indicate membrane-phase quantities.</span>
+
+<span class="sd">        The mean activity coefficient is given by</span>
+
+<span class="sd">        $$</span>
+<span class="sd">        \\bar \\gamma_\\pm = (\\gamma_{ct}^{\\nu_{ct}} \\gamma_{co}^{\\nu_{co}})^{\\frac{1}{\\nu_{ct} + \\nu_{co}}}</span>
+<span class="sd">        $$</span>
 
 <span class="sd">    References:</span>
 <span class="sd">        J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul,</span>
@@ -533,17 +669,21 @@ Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
 <span class="sd">        Polymers and Aqueous Salt Solutions: Importance of Counter-ion</span>
 <span class="sd">        Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.</span>
 
+<span class="sd">        Kamcev, J.; Paul, D. R.; Freeman, B. D. Ion Activity Coefficients in</span>
+<span class="sd">        Ion Exchange Polymers: Applicability of Manning’s Counterion Condensation</span>
+<span class="sd">        Theory. Macromolecules 2015, 48 (21), 8011–8024.</span>
+
 <span class="sd">        Manning, G. S. Limiting Laws and Counterion Condensation in</span>
 <span class="sd">        Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.</span>
 <span class="sd">        1969, 51 (3), 924–933.</span>
 <span class="sd">    """</span>
     <span class="c1"># check to make sure the signs of the input arguments are correct</span>
-    <span class="k">if</span> <span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">C_fix</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">z_counter</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">z_co</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">"Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."</span>
             <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">C_fix</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">z_counter</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">z_co</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">"Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."</span>
@@ -556,7 +696,7 @@ Polyelectrolyte Solutions I. Colligative Properties. J. Chem. Phys.
         <span class="p">)</span>
 
     <span class="c1"># calculate the ratio of fixed charge to mobile salt concentration</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span> <span class="o">/</span> <span class="n">ureg</span><span class="p">(</span><span class="n">Cs</span><span class="p">))</span><span class="o">.</span><span class="n">magnitude</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">C_fix</span> <span class="o">/</span> <span class="n">Cs</span><span class="p">)</span>
 
     <span class="c1"># calculate the critical value of the Manning parameter</span>
     <span class="n">xi_critical</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z_counter</span><span class="p">)</span>
@@ -620,20 +760,18 @@ according to Manning theory</p>
 <tbody>
 <tr>
 <td><code>xi</code></td>
-<td><code></code></td>
+<td><code>float</code></td>
 <td>
-<p>float
-Number representing the Manning parameter for the polymer,
+<p>Number representing the Manning parameter for the polymer,
 dimensionless.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 <tr>
-<td><code>fixed_charge</code></td>
-<td><code></code></td>
+<td><code>C_fix</code></td>
+<td><code>float</code></td>
 <td>
-<p>str quantity
-String representing the concentration of fixed charges, including sign.
+<p>Number representing the concentration of fixed charges, including sign.
 Must be specified in mol/L of water absorbed by the polymer. Note that
 monovalent charged groups are assumed.</p>
 </td>
@@ -641,55 +779,94 @@ monovalent charged groups are assumed.</p>
 </tr>
 <tr>
 <td><code>Cs</code></td>
-<td><code></code></td>
+<td><code>float</code></td>
 <td>
-<p>str quantity
-String representing the concentraiton of mobile salt inside the polymer.
+<p>Number representing the concentraiton of mobile salt inside the polymer.
 Must be specified in mol/L of water absorbed by the polymer.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 <tr>
 <td><code>vol_frac</code></td>
-<td><code></code></td>
+<td><code>float</code></td>
 <td>
-<p>float
-The volume fraction of water sorbed by the ion exchange membrane.</p>
+<p>The volume fraction of water sorbed by the ion exchange membrane.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>xi</code></td>
+<td><code>float</code></td>
+<td>
+<p>Number representing the Manning parameter for the polymer,
+dimensionless.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>C_fix</code></td>
+<td><code>float</code></td>
+<td>
+<p>Number representing the concentration of fixed charges, including sign.
+Must be specified in mol/L of water absorbed by the polymer. Note that
+monovalent charged groups are assumed.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>Cs</code></td>
+<td><code>float</code></td>
+<td>
+<p>Number representing the concentraiton of mobile salt inside the
+polymer. Must be specified in mol/L of water absorbed by the polymer.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code></code></td>
+<td><code>str</code></td>
 <td>
-<p>str, optional
-Specifies whether the counter-ion, co-ion, or the mean ionic activity
-coefficient is returned. Valid arguments are 'counter', 'co'.
+<p>:
+Specifies whether the counter-ion, co-ion, or the mean diffusion
+coefficient is returned. Valid arguments are 'counter', 'co'. 'mean' is not currently implemented.
 Defaults to 'counter' if not specified.</p>
 </td>
 <td><code>'counter'</code></td>
 </tr>
 <tr>
 <td><code>nu_counter</code></td>
-<td><code></code></td>
+<td><code>int</code></td>
 <td>
-<p>int , nu_co: int, optional
-Stoichiometric coefficients of the counter-ion and co-ion in the parent
-salt. Defautls to 1 if not specified.</p>
+<p>Stoichiometric coefficient of the counter-ion in the parent salt. Defaults to 1 if not specified.</p>
+</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>nu_co</code></td>
+<td><code>int</code></td>
+<td>
+<p>int
+Stoichiometric coefficient of the co-ion in the parent salt. Defaults to -1 if not specified.</p>
 </td>
 <td><code>1</code></td>
 </tr>
 <tr>
 <td><code>z_counter</code></td>
-<td><code></code></td>
+<td><code>int</code></td>
 <td>
-<p>int, z_co : int, optional
-Net charge, including sign, of the counter-ion and co-ion in the parent
-salt. Defaults to +1 and -1 if not specified. Note that the sign of
-z_counter must be opposite to the sign of fixed_charge, while the sign
-of z_co must match that of fixed_Charge.</p>
+<p>Net charge, including sign, of the counter-ion. Defaults to +1 if not specified. Note that the sign of
+z_counter must be opposite to the sign of C_fix.</p>
 </td>
 <td><code>1</code></td>
+</tr>
+<tr>
+<td><code>z_co</code></td>
+<td><code>int</code></td>
+<td>
+<p>Net charge, including sign, of the co-ion. Defaults to -1 if not specified. Note that the sign of
+z_co must be the same as the sign of C_fix.</p>
+</td>
+<td><code>-1</code></td>
 </tr>
 </tbody>
 </table>
@@ -713,33 +890,61 @@ of z_co must match that of fixed_Charge.</p>
 </table>
 <div class="admonition notes">
 <p class="admonition-title">Notes</p>
-<p>Ion diffusion coefficients when the Manning Parameter is greater than the critical
-value are given by:</p>
-<p>TODO update
-<script type="math/tex; mode=display">
-    \frac{D_g}{D_g^s}
-</script>
-</p>
-<p>Where $A$ is equal to</p>
+<p>When <script type="math/tex"> \xi \gt \frac{1}{|z_{ct}|} </script>, the counter-ion diffusion coefficient is given by:</p>
 <p>
 <script type="math/tex; mode=display">
-    \sum_{m1} \sum_{m2} [ \pi |z_g|(m_1^2+m_2^2)+|z_g|+ \frac{(\nu_g \nu_c)|z_g z_c||z_g| \xi}{X}]^-2
+    \frac{\bar D_{ct}}{D_{ct}} = \bigg( \frac{\frac{X}{z_{ct}^2 \nu_{ct} \xi} + 1}
+    {\frac{X}{|z_{ct}| \nu_{ct}} + 1} \bigg) \bigg( 1 - \frac{1}{3} z_{ct}^2 A(\frac{1}{|z_{ct}|},
+    \frac{X}{|z_{ct}| \xi}\bigg) \bigg( \frac{\phi_w}{2 - \phi_w} \bigg)^2
+</script>
+</p>
+<p>otherwise, when <script type="math/tex"> \xi \lt \frac{1}{|z_{ct}|} </script>:</p>
+<p>
+<script type="math/tex; mode=display">
+    \frac{\bar D_{ct}}{D_{ct}} = \bigg( 1 - \frac{1}{3} z_{ct}^2 A(\frac{1}{|z_{ct}|},
+    \frac{X}{|z_{ct}| \xi}\bigg) \bigg( \frac{\phi_w}{2 - \phi_w} \bigg)^2
+</script>
+</p>
+<p>In either case, co-ion diffusion coefficient is given by</p>
+<p>
+<script type="math/tex; mode=display">
+    \frac{\bar D_{co}}{D_{co}} = \bigg( 1 - \frac{1}{3} z_{co}^2 A(\frac{1}{|z_{ct}|},
+    \frac{X}{|z_{ct}| \xi}\bigg) \bigg( \frac{\phi_w}{2 - \phi_w} \bigg)^2
+</script>
+</p>
+<p>where</p>
+<p>
+<script type="math/tex; mode=display">
+    A = \sum_{m_1} \sum_{m_2} \bigg [ \pi |z_{ct}|(m_1^2+m_2^2)+|z_{ct}|+ \frac{(\nu_{ct}
+    + \nu_{co})|z_{ct} z_{co}||z_{ct}| \xi}{X} \bigg]^{-2}
+</script>
+</p>
+<p>
+<script type="math/tex; mode=display">
+X = \frac{\bar C_{co}}{\bar C_{fix}}
+</script>
+</p>
+<p>
+<script type="math/tex">\bar D</script> are diffusion coefficients, <script type="math/tex"> \bar C_{fix} </script> is the fixed charge concentration (including sign),
+<script type="math/tex"> \xi </script> is the Manning parameter, <script type="math/tex"> \bar C_{co} </script> is the co-ion concentration in the membrane,
+and subscripts <script type="math/tex">co</script> and <script type="math/tex">ct</script> refer to the co-ion and counter-ion, respectively, and overbars indicate
+membrane-phase quantities.</p>
+<p>The mean salt diffusion coefficient is given by</p>
+<p>
+<script type="math/tex; mode=display">
+\bar D_s = \frac{\bar D_{ct} \bar D_{co} (z_{ct}^2 \bar C_{ct} + z_{co}^2 \bar C_{co} )}
+{z_{ct}^2 \bar D_{ct} \bar C_{ct} + z_{co}^2 \bar D_{co} \bar C_{co} }
 </script>
 </p>
 </div>
 <div class="admonition references">
 <p class="admonition-title">References</p>
-<p>J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul, B. Freeman, et al.,
-Partitioning of Mobile Ions Between Ion Exchange Polymers and Aqueous Salt Solutions:
-Importance of Counter-ion Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.</p>
-<p>Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions I.
-Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.</p>
-</div>
-<div class="admonition examples">
-<p class="admonition-title">Examples</p>
-<p>An example based on Figure 7 of the Kamcev Reference
-<code>manning.diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')</code>
-0.10082061291437808</p>
+<p>Kamcev, J.; Paul, D. R.; Manning, G. S.; Freeman, B. D. Predicting Salt Permeability Coefficients
+in Highly Swollen, Highly Charged Ion Exchange Membranes. ACS Appl. Mater. Interfaces 2017, 9 (4), 4044–4056.</p>
+<p>Kamcev, Jovan, Paul, Donald R., Manning, Gerald S., Freeman, B. D. Ion Diffusion Coefficients in
+Ion Exchange Membranes: Significance of Counter-Ion Condensation. Macromolecules 2018, 51 (15), 5519–5529.</p>
+<p>Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions II.
+Self‐ Diffusion of the Small Ions. J. Chem. Phys. 1969, 51 (3), 934–938.</p>
 </div>
 <details class="quote">
 <summary>Source code in <code>membrane_toolkit/core/manning.py</code></summary>
@@ -747,46 +952,7 @@ Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293
-294
-295
-296
-297
-298
-299
-300
-301
-302
-303
-304
-305
-306
-307
-308
-309
-310
+<pre><span></span>310
 311
 312
 313
@@ -874,99 +1040,216 @@ Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.</p>
 395
 396
 397
-398</pre>
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">diffusion_coefficient_manning</span><span class="p">(</span>
-    <span class="n">xi</span><span class="p">,</span>
-    <span class="n">fixed_charge</span><span class="p">,</span>
-    <span class="n">Cs</span><span class="p">,</span>
-    <span class="n">vol_frac</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="s2">"counter"</span><span class="p">,</span>
-    <span class="n">nu_counter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">nu_co</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">z_counter</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">z_co</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">xi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">C_fix</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">Cs</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">vol_frac</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"counter"</span><span class="p">,</span>
+    <span class="n">nu_counter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">nu_co</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">z_counter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">z_co</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Return a diffusion coefficient inside a charged polymer,</span>
 <span class="sd">    according to Manning theory</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        xi: float</span>
+<span class="sd">        xi:</span>
 <span class="sd">            Number representing the Manning parameter for the polymer,</span>
 <span class="sd">            dimensionless.</span>
-<span class="sd">        fixed_charge: str quantity</span>
-<span class="sd">            String representing the concentration of fixed charges, including sign.</span>
+<span class="sd">        C_fix:</span>
+<span class="sd">            Number representing the concentration of fixed charges, including sign.</span>
 <span class="sd">            Must be specified in mol/L of water absorbed by the polymer. Note that</span>
 <span class="sd">            monovalent charged groups are assumed.</span>
-<span class="sd">        Cs: str quantity</span>
-<span class="sd">            String representing the concentraiton of mobile salt inside the polymer.</span>
+<span class="sd">        Cs:</span>
+<span class="sd">            Number representing the concentraiton of mobile salt inside the polymer.</span>
 <span class="sd">            Must be specified in mol/L of water absorbed by the polymer.</span>
-<span class="sd">        vol_frac: float</span>
+<span class="sd">        vol_frac:</span>
 <span class="sd">            The volume fraction of water sorbed by the ion exchange membrane.</span>
-<span class="sd">        type: str, optional</span>
-<span class="sd">            Specifies whether the counter-ion, co-ion, or the mean ionic activity</span>
-<span class="sd">            coefficient is returned. Valid arguments are 'counter', 'co'.</span>
+<span class="sd">        xi:</span>
+<span class="sd">            Number representing the Manning parameter for the polymer,</span>
+<span class="sd">            dimensionless.</span>
+<span class="sd">        C_fix:</span>
+<span class="sd">            Number representing the concentration of fixed charges, including sign.</span>
+<span class="sd">            Must be specified in mol/L of water absorbed by the polymer. Note that</span>
+<span class="sd">            monovalent charged groups are assumed.</span>
+<span class="sd">        Cs:</span>
+<span class="sd">            Number representing the concentraiton of mobile salt inside the</span>
+<span class="sd">            polymer. Must be specified in mol/L of water absorbed by the polymer.</span>
+<span class="sd">        type::</span>
+<span class="sd">            Specifies whether the counter-ion, co-ion, or the mean diffusion</span>
+<span class="sd">            coefficient is returned. Valid arguments are 'counter', 'co'. 'mean' is not currently implemented.</span>
 <span class="sd">            Defaults to 'counter' if not specified.</span>
-<span class="sd">        nu_counter: int , nu_co: int, optional</span>
-<span class="sd">            Stoichiometric coefficients of the counter-ion and co-ion in the parent</span>
-<span class="sd">            salt. Defautls to 1 if not specified.</span>
-<span class="sd">        z_counter: int, z_co : int, optional</span>
-<span class="sd">            Net charge, including sign, of the counter-ion and co-ion in the parent</span>
-<span class="sd">            salt. Defaults to +1 and -1 if not specified. Note that the sign of</span>
-<span class="sd">            z_counter must be opposite to the sign of fixed_charge, while the sign</span>
-<span class="sd">            of z_co must match that of fixed_Charge.</span>
+<span class="sd">        nu_counter:</span>
+<span class="sd">            Stoichiometric coefficient of the counter-ion in the parent salt. Defaults to 1 if not specified.</span>
+<span class="sd">        nu_co : int</span>
+<span class="sd">            Stoichiometric coefficient of the co-ion in the parent salt. Defaults to -1 if not specified.</span>
+<span class="sd">        z_counter:</span>
+<span class="sd">            Net charge, including sign, of the counter-ion. Defaults to +1 if not specified. Note that the sign of</span>
+<span class="sd">            z_counter must be opposite to the sign of C_fix.</span>
+<span class="sd">        z_co:</span>
+<span class="sd">            Net charge, including sign, of the co-ion. Defaults to -1 if not specified. Note that the sign of</span>
+<span class="sd">            z_co must be the same as the sign of C_fix.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        float: The mean or individual ion diffusion coefficient inside the polymer, normalized</span>
 <span class="sd">            by the ion diffusion coefficient in bulk solution (D_mem / D_bulk).</span>
 
 <span class="sd">    Notes:</span>
-<span class="sd">        Ion diffusion coefficients when the Manning Parameter is greater than the critical</span>
-<span class="sd">        value are given by:</span>
-
-<span class="sd">        TODO update</span>
-<span class="sd">        $$</span>
-<span class="sd">            \\frac{D_g}{D_g^s}</span>
-<span class="sd">        $$</span>
-
-<span class="sd">        Where $A$ is equal to</span>
+<span class="sd">        When \( \\xi \\gt \\frac{1}{|z_{ct}|} \), the counter-ion diffusion coefficient is given by:</span>
 
 <span class="sd">        $$</span>
-<span class="sd">            \\sum_{m1} \\sum_{m2} [ \\pi |z_g|(m_1^2+m_2^2)+|z_g|+ \\frac{(\\nu_g \\nu_c)|z_g z_c||z_g| \\xi}{X}]^-2</span>
+<span class="sd">            \\frac{\\bar D_{ct}}{D_{ct}} = \\bigg( \\frac{\\frac{X}{z_{ct}^2 \\nu_{ct} \\xi} + 1}</span>
+<span class="sd">            {\\frac{X}{|z_{ct}| \\nu_{ct}} + 1} \\bigg) \\bigg( 1 - \\frac{1}{3} z_{ct}^2 A(\\frac{1}{|z_{ct}|},</span>
+<span class="sd">            \\frac{X}{|z_{ct}| \\xi}\\bigg) \\bigg( \\frac{\\phi_w}{2 - \\phi_w} \\bigg)^2</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        otherwise, when \( \\xi \\lt \\frac{1}{|z_{ct}|} \):</span>
+
+<span class="sd">        $$</span>
+<span class="sd">            \\frac{\\bar D_{ct}}{D_{ct}} = \\bigg( 1 - \\frac{1}{3} z_{ct}^2 A(\\frac{1}{|z_{ct}|},</span>
+<span class="sd">            \\frac{X}{|z_{ct}| \\xi}\\bigg) \\bigg( \\frac{\\phi_w}{2 - \\phi_w} \\bigg)^2</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        In either case, co-ion diffusion coefficient is given by</span>
+
+<span class="sd">        $$</span>
+<span class="sd">            \\frac{\\bar D_{co}}{D_{co}} = \\bigg( 1 - \\frac{1}{3} z_{co}^2 A(\\frac{1}{|z_{ct}|},</span>
+<span class="sd">            \\frac{X}{|z_{ct}| \\xi}\\bigg) \\bigg( \\frac{\\phi_w}{2 - \\phi_w} \\bigg)^2</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        where</span>
+
+<span class="sd">        $$</span>
+<span class="sd">            A = \\sum_{m_1} \\sum_{m_2} \\bigg [ \\pi |z_{ct}|(m_1^2+m_2^2)+|z_{ct}|+ \\frac{(\\nu_{ct}</span>
+<span class="sd">            + \\nu_{co})|z_{ct} z_{co}||z_{ct}| \\xi}{X} \\bigg]^{-2}</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        $$</span>
+<span class="sd">        X = \\frac{\\bar C_{co}}{\\bar C_{fix}}</span>
+<span class="sd">        $$</span>
+
+<span class="sd">        \(\\bar D\) are diffusion coefficients, \( \\bar C_{fix} \) is the fixed charge concentration (including sign),</span>
+<span class="sd">        \( \\xi \) is the Manning parameter, \( \\bar C_{co} \) is the co-ion concentration in the membrane,</span>
+<span class="sd">        and subscripts \(co\) and \(ct\) refer to the co-ion and counter-ion, respectively, and overbars indicate</span>
+<span class="sd">        membrane-phase quantities.</span>
+
+<span class="sd">        The mean salt diffusion coefficient is given by</span>
+
+<span class="sd">        $$</span>
+<span class="sd">        \\bar D_s = \\frac{\\bar D_{ct} \\bar D_{co} (z_{ct}^2 \\bar C_{ct} + z_{co}^2 \\bar C_{co} )}</span>
+<span class="sd">        {z_{ct}^2 \\bar D_{ct} \\bar C_{ct} + z_{co}^2 \\bar D_{co} \\bar C_{co} }</span>
 <span class="sd">        $$</span>
 
 <span class="sd">    References:</span>
-<span class="sd">        J. Kamcev, M. Galizia, F.M. Benedetti, E.-S. Jang, D.R. Paul, B. Freeman, et al.,</span>
-<span class="sd">        Partitioning of Mobile Ions Between Ion Exchange Polymers and Aqueous Salt Solutions:</span>
-<span class="sd">        Importance of Counter-ion Condensation, Phys. Chem. Chem. Phys. (2016). doi:10.1039/C5CP06747B.</span>
+<span class="sd">        Kamcev, J.; Paul, D. R.; Manning, G. S.; Freeman, B. D. Predicting Salt Permeability Coefficients</span>
+<span class="sd">        in Highly Swollen, Highly Charged Ion Exchange Membranes. ACS Appl. Mater. Interfaces 2017, 9 (4), 4044–4056.</span>
 
-<span class="sd">        Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions I.</span>
-<span class="sd">        Colligative Properties. J. Chem. Phys. 1969, 51 (3), 924–933.</span>
+<span class="sd">        Kamcev, Jovan, Paul, Donald R., Manning, Gerald S., Freeman, B. D. Ion Diffusion Coefficients in</span>
+<span class="sd">        Ion Exchange Membranes: Significance of Counter-Ion Condensation. Macromolecules 2018, 51 (15), 5519–5529.</span>
 
-<span class="sd">    Examples:</span>
-<span class="sd">        An example based on Figure 7 of the Kamcev Reference</span>
-<span class="sd">        ```manning.diffusion_coefficient_manning(2,'-3.21 mol/L','1 mol/L',0.5,type='co')```</span>
-<span class="sd">        0.10082061291437808</span>
-
+<span class="sd">        Manning, G. S. Limiting Laws and Counterion Condensation in Polyelectrolyte Solutions II.</span>
+<span class="sd">        Self‐ Diffusion of the Small Ions. J. Chem. Phys. 1969, 51 (3), 934–938.</span>
 <span class="sd">    """</span>
     <span class="c1"># check to make sure the signs of the input arguments are correct</span>
-    <span class="k">if</span> <span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">C_fix</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">z_counter</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">z_co</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">"Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."</span>
             <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">C_fix</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">z_counter</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">z_co</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">"Mismatch between signs of fixed charge, counter-ion, and co-ion. Aborting."</span>
             <span class="p">)</span>
 
     <span class="c1"># calculate the ratio of fixed charge to mobile salt concentration</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ureg</span><span class="p">(</span><span class="n">fixed_charge</span><span class="p">)</span> <span class="o">/</span> <span class="n">ureg</span><span class="p">(</span><span class="n">Cs</span><span class="p">))</span><span class="o">.</span><span class="n">magnitude</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">C_fix</span> <span class="o">/</span> <span class="n">Cs</span><span class="p">)</span>
 
     <span class="c1"># calculate the critical value of the Manning parameter</span>
     <span class="n">xi_critical</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z_counter</span><span class="p">)</span>
