@@ -11,11 +11,12 @@ theme:
 nav:
   - Home: index.md
   - Installation: install.md
+  - Getting Started: getting_started.md
   - Core Functions: 
       - Diffusion: core_functions/diffusion.md
-      - Donnan Exclusion: core_functions/donnan.md
+      - Donnan Equilibrium: core_functions/donnan.md
       - Manning Theory: core_functions/manning.md
-      - Electrochemical: core_functions/potential.md
+      - Electrochemical Properties: core_functions/potential.md
   - For Developers: develop.md
 
 repo_url: https://github.com/rkingsbury/membrane-toolkit
