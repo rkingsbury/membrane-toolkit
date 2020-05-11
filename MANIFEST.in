@@ -1,2 +1,2 @@
-recursive-include membrane_toolkit *.*
-recursive-include examples *.*
+graft membrane_toolkit
+graft examples

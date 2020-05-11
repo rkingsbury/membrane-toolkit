@@ -10,6 +10,7 @@ setup(
     license="BSD 3-clause license",
     packages=find_packages(),
     install_requires=["numpy>=1.14.3", "monty>=3.0.2", "maggma>=0.19", "pint>=0.11", "openpyxl", "pandas"],
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 3 - Alpha",

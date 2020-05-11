@@ -38,7 +38,7 @@ def apparent_permselectivity(
     References:
         Kingsbury, R. S.; Coronell, O. Modelling and validation of concentration
         dependence of ion exchange membrane permselectivity: significance of convection
-        and Manning’s counter-ion condensation theory. J. Membrane Science XXXX.
+        and Manning’s counter-ion condensation theory. Submitted.
     """
     # t_counter must be between 0 and 1
     if t_counter < 0 or t_counter > 1:
@@ -48,6 +48,25 @@ def apparent_permselectivity(
         )
 
     return (E_mem / E_ideal + 1 - 2 * t_counter) / (2 - 2 * t_counter)
+
+
+def transport_number():
+    """
+    Calculate the transport number of an ionic species in the membrane
+    """
+    pass
+
+
+def streaming_potential():
+    pass
+
+
+def membrane_potential():
+    pass
+
+
+def diffusion_potential():
+    pass
 
 
 def nernst_potential(
