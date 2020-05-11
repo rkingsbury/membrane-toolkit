@@ -42,6 +42,10 @@ plugins:
   - mkdocstrings:
       watch:
         - membrane_toolkit
+      handlers:
+        python:
+          rendering:
+            show_root_heading: yes
 
 extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
