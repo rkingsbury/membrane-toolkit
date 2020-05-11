@@ -7,20 +7,7 @@ that membrane-toolkit is released with a Contributor
 [Code of Conduct](https://github.com/rkingsbury/membrane-toolkit/blob/master/CODE_OF_CONDUCT.MD).
 By participating in this project you agree to abide by its terms.
 
-
-
-
-### Code Organization
-
-Core - fully documented, thoroughly tested, standalone functions for key calculations,
-    implemented with floating point math and available in unitized versions with Quantity support
-
-
-
-
-
-
-### Coding Concepts
+## Coding Concepts
 
 membrane-toolkit is designed to work closely with the family of codes maintained by
 [The Materials Project](https://github.com/materialsproject/). In particular, 
@@ -28,28 +15,33 @@ we follow the major architectural decisions of the
 [pymatgen](https://github.com/materialsproject/pymatgen) maintainers regarding
 coding style, test framework, Python compatbility, etc. 
 
-
 ### Key third-party libraries
 
 Wherever possible, we 
-import functionality from pymatgen or other codes rather than duplicate 
-functionality. For example, we use pymatgen's `Composition` class to represent 
-chemical information about different materials. If you are new to this family 
-of codes, it will be especially helpful to familiarize yourself with the 
+import functionality from other codes rather than duplicate 
+functionality. For example, we use pint's `Quantity` class to handle unit conversion.
+It will be especially helpful to familiarize yourself with the 
 following methods and packages, in addition to standard scientific Python codes
 like numpy and scipy:
 
  - `MSONable`, `loadfn` and `dumpfn` serialization routines from the
    [monty](https://github.com/materialsvirtuallab/monty) package
+ - `Drone`, `Builder`, and `Store` classes from [maggma](https://materialsproject.github.io/maggma/concepts/)
  - Units-aware computation using [pint](https://pint.readthedocs.io/en/0.9/)
    Quantity objects.
- - `Element`, `Specie`, and `Composition` classes from 
-   [pymatgen](https://github.com/materialsproject/pymatgen)
- - String operations in [pymatgen.util.string](https://github.com/materialsproject/pymatgen/blob/2a813c172f3be38efc3205a102021eaba1da156f/pymatgen/util/string.py)
- - Type Hinting functionality in the 
-   [typing](https://docs.python.org/3/library/typing.html) module
- - `Builder` class from [maggma](https://github.com/materialsproject/maggma)
 
+### Code Organization
+
+The code is organized according to the following scheme.
+
+ - The `core` module contains fully documented, thoroughly tested, standalone functions for key calculations,
+   implemented with floating point math and available in unitized versions with Quantity support in the `unitized`
+   module. The `core` module is where the science lives, and standards for code quality and test coverage
+   are enforced most rigorously here.
+ - The `pipeline` module contains all the infrastructure for data aggregation, including Drone, Store, and Builder
+   definitions and templates.
+ - test files are placed in /test subdirectories of the module that they test. One test file per module, named 
+   "test_<modulename>.py"
 
 ## Coding Guidelines
 
@@ -87,7 +79,6 @@ code must adhere to the following:
    check your code style BEFORE submitting a pull request.
 
 4. **Python 3**. We only support Python 3.7+.
-
 
 If in doubt about any of the above, please refer to the source code in `membrane_toolkit.core` for
 examples of what is expected.

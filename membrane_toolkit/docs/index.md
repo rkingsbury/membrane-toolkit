@@ -7,9 +7,9 @@
 membrane-toolkit is a suite of Python tools for membrane science. There are currently two primary ways to
 use it:
 
-### As a Calculator
+### A Calculator
 
-membrane-toolkit's [core](core_functions/core_functions.md) module packages complex equations from the
+membrane-toolkit's `core` module packages complex equations from the
 literature into rigorous, validated Python routines that make it fast and easy to perform state-of-the-science
 analysis. Each core function has detailed documentation, including formulas, assumptions, and references, and
 is thoroughly tested for correctness using published data.
@@ -21,9 +21,9 @@ support for automatic unit conversion, eliminating another potential source of e
 Core functions can be used for standalone calculations, as part of a data analysis pipline, or as building blocks
 for sophisticated transport models.
 
-### As an automatic Data Aggregator
+### An automatic Data Aggregator
 
-membrane-toolkit's [pipeline]() module makes it easy to automatically aggregate and process experimental
+membrane-toolkit's `pipeline` module makes it easy to automatically aggregate and process experimental
 data. It leverages the [maggma](https://materialsproject.github.io/maggma/) framework to collect parse data from
 Excel spreadsheets into versatible objects called Stores that can interface with numerous database providers,
 including MongoDB, Pandas dataframes, Amazon storage, and more.

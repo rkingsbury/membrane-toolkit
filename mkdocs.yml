@@ -4,6 +4,9 @@ copyright: Ryan Kingsbury
 
 theme:
   name: 'material'
+  palette:
+    primary: 'light blue'
+    accent: 'deep orange'
 
 nav:
   - Home: index.md
@@ -13,13 +16,11 @@ nav:
       - Donnan Exclusion: core_functions/donnan.md
       - Manning Theory: core_functions/manning.md
       - Electrochemical: core_functions/potential.md
-  - Data Pipeline: pipeline/pipeline.md
   - For Developers: develop.md
 
 repo_url: https://github.com/rkingsbury/membrane-toolkit
 site_url: https://rkingsbury.github.io/membrane-toolkit/
 docs_dir: ./membrane_toolkit/docs
-site_dir: ./docs
 copyright: 2020 Ryan Kingsbury
 markdown_extensions:
   - admonition
