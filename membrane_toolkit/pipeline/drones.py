@@ -6,7 +6,7 @@
 module containing Drones that parse file-based data
 """
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 from datetime import datetime
 
 from openpyxl import load_workbook
@@ -95,7 +95,7 @@ class ExcelDrone(Drone):
                     "text": data.txt
                 }
         """
-        record = dict()
+        record: dict = dict()
 
         for document in recordID.documents:
             wb = load_workbook(document.path, read_only=True, data_only=True, keep_vba=False, keep_links=True)
@@ -131,10 +131,11 @@ class ExptDrone(ExcelDrone):
         config: Name of a .yaml file that specifies the structure of the parsed spreadsheet data.
         path: Path to the directory containing the files to be parsed.
     """
-    def __init__(self, path: Path, store: Store, config: str):
+    def __init__(self, path: Path, store: Optional[Store], config: str):
         self.config = loadfn(DRONE_TEMPLATE_DIR / config)
-        self.store = PandasStore(key="record_key")
-        super().__init__(self.store, path, self.config)
+        if not store:
+            store = PandasStore(key="record_key")
+        super().__init__(store, path, self.config)
 
 
 class PermselectivityDrone(ExptDrone):
@@ -145,5 +146,5 @@ class PermselectivityDrone(ExptDrone):
         path: Path to the directory containing the files to be parsed.
         config: Name of a .yaml file that specifies the structure of the parsed spreadsheet data.
     """
-    def __init__(self, path: Path, store: Store = None, config: str = "apparent_permselectivity.yaml"):
+    def __init__(self, path: Path, store: Optional[Store] = None, config: str = "apparent_permselectivity.yaml"):
         super().__init__(path, store, config)
