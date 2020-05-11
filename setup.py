@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="membrane_toolkit",
-    version="0.0.1",
+    version="0.1.0",
     description="Python tools for membrane science",
     url="https://github.com/rkingsbury/membrane-toolkit",
     author="Ryan Kingsbury",
