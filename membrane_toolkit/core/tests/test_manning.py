@@ -91,9 +91,7 @@ def test_activity_against_lit_monovalent_uncondensed():
     # so gamma_membrane^2 = C_bulk ^2 0.85 ^2 / C_+ C_-
     # C- = Cs and C+ = Cs + Cfix
     # so gamma_membrane =( 0.03^2 0.85^2 / 0.0007 / 2.6607 )^0.5 = 0.590
-    assert allclose(
-        get_activity_coefficient_manning(xi, Cfix, Cs), 0.590, atol=0.02
-    )
+    assert allclose(get_activity_coefficient_manning(xi, Cfix, Cs), 0.590, atol=0.02)
 
 
 def test_activity_continuity_monovalent():
@@ -110,7 +108,7 @@ def test_activity_continuity_monovalent():
     assert allclose(
         get_activity_coefficient_manning(1.01, Cfix, Cs),
         get_activity_coefficient_manning(0.99, Cfix, Cs),
-        atol=0.01
+        atol=0.01,
     )
 
 
@@ -164,6 +162,7 @@ def test_symmetry():
     # we reverse the charge of the membrane (i.e.,
     # reverse the co- and counter-ions)
     from pyEQL import Solution
+
     bulk_solution = Solution(
         [["Na+", "0.5 mol/L"], ["Cl-", "0.5 mol/L"]], temperature="25 degC"
     )

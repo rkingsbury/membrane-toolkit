@@ -13,7 +13,7 @@ from membrane_toolkit.core.unitized import (
     diffusion_coefficient_mackie_meares,
     apparent_permselectivity,
     nernst_potential,
-    donnan_equilibrium
+    donnan_equilibrium,
 )
 
 

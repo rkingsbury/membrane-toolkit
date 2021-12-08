@@ -9,7 +9,9 @@ import numpy as np
 
 
 def apparent_permselectivity(
-    E_mem: float, E_ideal: float, t_counter: float = 0.5,
+    E_mem: float,
+    E_ideal: float,
+    t_counter: float = 0.5,
 ) -> float:
     """
     Calculate the apparent permselectivity of a membrane from the membrane potential.

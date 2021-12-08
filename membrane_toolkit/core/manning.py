@@ -109,7 +109,14 @@ def manning_eql(solution, xi, fixed_charge):
 
         # get the mean activity coefficient of the ions in the polymer
         gamma_mean = get_activity_coefficient_manning(
-            xi, Cfix * zfix, Cc, "mean", nu_counter, nu_co, z_counter, z_co,
+            xi,
+            Cfix * zfix,
+            Cc,
+            "mean",
+            nu_counter,
+            nu_co,
+            z_counter,
+            z_co,
         )
 
         # calculate the LHS of the concentration expression
