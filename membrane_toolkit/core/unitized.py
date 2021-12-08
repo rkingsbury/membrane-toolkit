@@ -22,7 +22,7 @@ ureg = UnitRegistry()
 
 # diffusion.py
 
-diffusion_coefficient_mackie_meares = ureg.wraps(
+diffusion_coefficient_mackie_meares = ureg.wraps(  # type: ignore
     "m ** 2 / s",
     (
         "m ** 2 / s",
@@ -33,13 +33,13 @@ diffusion_coefficient_mackie_meares = ureg.wraps(
 # donnan.py
 
 donnan_equilibrium = ureg.wraps(
-    "mol/L", ("mol/L", "mol/L", None, None, None, None, None, None)
+    "mol/L", ("mol/L", "mol/L", None, None, None, None, None, None)  # type: ignore
 )(donnan_equilibrium)
 
 # potential.py
 
-apparent_permselectivity = ureg.wraps(ureg.dimensionless, ("V", "V", None))(
+apparent_permselectivity = ureg.wraps(ureg.dimensionless, ("V", "V", None))(  # type: ignore
     apparent_permselectivity
 )
 
-nernst_potential = ureg.wraps("V", ("=A", "=A", None, "degC"))(nernst_potential)
+nernst_potential = ureg.wraps("V", ("=A", "=A", None, "degC"))(nernst_potential)  # type: ignore
