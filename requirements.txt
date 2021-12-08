@@ -1,6 +1,6 @@
 numpy
 monty
-maggma
+maggma>=0.37
 pint
 # required by pint if you want uncertainty propagation
 uncertainties
