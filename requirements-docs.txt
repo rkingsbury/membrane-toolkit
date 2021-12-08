@@ -1,6 +1,6 @@
 mkdocs>=1.2.3
 mkdocs-material>=8
-mkdocs-material-components>=1.10.11
+# mkdocs-material-components
 mkdocs-minify-plugin>=0.3.0
 mkdocstrings>=0.15
 python-markdown-math
