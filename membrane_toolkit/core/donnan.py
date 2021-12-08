@@ -82,10 +82,14 @@ def donnan_equilibrium(
         permselectivity: significance of convection and Manning’s counter-ion condensation theory. Submitted.
     """
     # validate input arguments
-    assert nu_counter > 0
-    assert nu_co > 0
-    assert nu_counter * z_counter == -1 * nu_co * z_co
-    assert z_fix * z_counter < 0
+    assert nu_counter > 0, "Stoichiometric coefficient nu must be > 0"
+    assert nu_co > 0, "Stoichiometric coefficient nu must be > 0"
+    assert (
+        nu_counter * z_counter == -1 * nu_co * z_co
+    ), "Salt stoichiometry is not electroneutral"
+    assert (
+        z_fix * z_counter < 0
+    ), "Fixed charge and counter-ion must have opposite signs"
 
     def _donnan_solver(C_co):
         # private function to interatively solve for co-ion concentration.
